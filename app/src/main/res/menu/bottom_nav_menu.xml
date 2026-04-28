@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_closet" android:title="@string/tab_closet" android:icon="@android:drawable/ic_menu_gallery" />
+    <item android:id="@+id/nav_ootd" android:title="OOTD" android:icon="@android:drawable/ic_menu_camera" />
+    <item android:id="@+id/nav_laundry" android:title="@string/tab_laundry" android:icon="@android:drawable/ic_popup_sync" />
+    <item android:id="@+id/nav_outfit_ai" android:title="Outfit AI" android:icon="@android:drawable/ic_menu_search" />
+    <item android:id="@+id/nav_profile" android:title="Profile" android:icon="@android:drawable/ic_menu_myplaces" />
+</menu>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Akıllı Dolap</string>
+    <string name="tab_closet">Dolap</string>
+    <string name="tab_laundry">Kirli Sepeti</string>
+    <string name="add_item">Kıyafet Ekle</string>
+    <string name="swipe_to_wash">Yıkanmaya Gönder</string>
+    <string name="swipe_to_closet">Dolaba Geri Koy</string>
+    <string name="status_clean">Temiz</string>
+    <string name="status_dirty">Kirli</string>
+</resources>

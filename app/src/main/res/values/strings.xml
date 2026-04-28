@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Smart Wardrobe</string>
+    <string name="tab_closet">Closet</string>
+    <string name="tab_laundry">Laundry</string>
+    <string name="add_item">Add Item</string>
+    <string name="swipe_to_wash">Swipe to Wash</string>
+    <string name="swipe_to_closet">Return to Closet</string>
+    <string name="status_clean">Clean</string>
+    <string name="status_dirty">Dirty</string>
+</resources>
