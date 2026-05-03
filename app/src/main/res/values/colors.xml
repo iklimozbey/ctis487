@@ -10,6 +10,7 @@
     <color name="card_bg">#141414</color>
     <color name="border_color">#2A2A2A</color>
     <color name="text_muted">#666666</color>
+    <color name="gray">#B0B0B0</color>
     
     <!-- Required base colors -->
     <color name="purple_200">#C8A96E</color>

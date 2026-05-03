@@ -55,5 +55,31 @@
             app:layout_constraintStart_toEndOf="@id/imgItem"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <ImageView
+            android:id="@+id/btnLaundry"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="6dp"
+            android:padding="6dp"
+            app:srcCompat="@drawable/ic_closet"
+            android:background="@drawable/delete_bg_circle"
+            android:elevation="6dp"
+            app:layout_constraintTop_toTopOf="@id/imgItem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/btnDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="6dp"
+            android:padding="6dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="@drawable/delete_bg_circle"
+            android:elevation="6dp"
+            app:layout_constraintTop_toTopOf="@id/imgItem"
+            app:layout_constraintEnd_toStartOf="@id/btnLaundry"
+            app:tint="@android:color/white" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

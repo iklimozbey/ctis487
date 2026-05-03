@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.2"
+agp = "8.6.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -9,6 +9,8 @@ appcompat = "1.7.1"
 material = "1.9.0"
 activity = "1.10.0"
 constraintlayout = "2.2.1"
+room3CommonJvm = "3.0.0-alpha03"
+room3RuntimeAndroid = "3.0.0-alpha03"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -19,6 +21,8 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-room3-common-jvm = { group = "androidx.room3", name = "room3-common-jvm", version.ref = "room3CommonJvm" }
+androidx-room3-runtime-android = { group = "androidx.room3", name = "room3-runtime-android", version.ref = "room3RuntimeAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
