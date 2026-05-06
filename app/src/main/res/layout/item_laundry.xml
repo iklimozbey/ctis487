@@ -28,11 +28,11 @@
             app:layout_constraintDimensionRatio="4:5"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 🧼 Laundry Badge -->
+        <!-- Laundry Badge -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LAUNDRY"
+            android:text="@string/laundry"
             android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="@color/accent"
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_marginTop="12dp"
-                android:text="RESTORE TO CLOSET"
+                android:text="@string/restore_to_closet"
                 android:textSize="10sp"
                 android:textColor="@color/accent"
                 app:strokeColor="@color/accent"

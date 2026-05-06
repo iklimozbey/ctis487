@@ -1,6 +1,6 @@
 package com.ctis487.smartwardrobe.adapter
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +13,7 @@ import java.net.URL
 import com.ctis487.smartwardrobe.databinding.ItemClosetBinding
 import com.ctis487.smartwardrobe.databinding.ItemLaundryBinding
 import com.ctis487.smartwardrobe.db.ClothingItem
+
 
 class WardrobeAdapter(
     private var items: List<ClothingItem>,

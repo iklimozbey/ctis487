@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="STYLIST'S PICK"
+                android:text="@string/stylists_pick"
                 android:textColor="@color/black"
                 android:background="@color/accent"
                 android:textSize="10sp"
@@ -34,7 +34,7 @@
                 android:id="@+id/tvOotdTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="THE WEEKEND\nMINIMALIST"
+                android:text="@string/weekend_minimalist"
                 android:textColor="@color/white"
                 android:textSize="40sp"
                 android:textStyle="bold"
@@ -42,7 +42,6 @@
                 android:lineSpacingExtra="-8dp"
                 android:letterSpacing="0.02" />
 
-            <!-- 🖼 Hero Image Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +60,6 @@
                     android:background="@color/black" />
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 🧠 AI Insights Panel -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +69,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="EXPERT REASONING"
+                    android:text="@string/expert_reasoning"
                     android:textColor="@color/accent"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -81,7 +79,7 @@
                     android:id="@+id/tvReasoning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Analyzing DNA..."
+                    android:text="@string/analyzing_dna"
                     android:textColor="@color/warm_gray"
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
@@ -98,7 +96,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ENVIRONMENT"
+                    android:text="@string/environment"
                     android:textColor="@color/accent"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -114,7 +112,7 @@
                         android:id="@+id/tvWeather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🌥️ 22°C"
+                        android:text="@string/weather"
                         android:textColor="@color/white"
                         android:background="@drawable/ctx_pill_bg"
                         android:paddingHorizontal="12dp"
@@ -125,7 +123,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📅 0 EVENTS"
+                        android:text="@string/events"
                         android:textColor="@color/white"
                         android:background="@drawable/ctx_pill_bg"
                         android:paddingHorizontal="12dp"
@@ -138,7 +136,7 @@
                 android:id="@+id/btnGenerateOotd"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="REGENERATE LOOK"
+                android:text="@string/regenerate_look"
                 android:layout_marginTop="40dp"
                 android:backgroundTint="@color/accent"
                 android:textColor="@color/black"

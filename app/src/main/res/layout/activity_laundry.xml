@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LAUNDRY BASKET"
+            android:text="@string/laundry_basket"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -26,7 +26,7 @@
             android:id="@+id/tvSubtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ITEMS NEED WASHING"
+            android:text="@string/items_need_washing"
             android:textColor="@color/warm_gray"
             android:textSize="12sp"
             android:textStyle="bold"
@@ -49,10 +49,39 @@
             android:layout_height="wrap_content"
             app:singleSelection="true"
             app:selectionRequired="true">
-            <com.google.android.material.chip.Chip android:id="@+id/chipAll" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All" style="@style/Widget.Material3.Chip.Filter" app:checkedIconVisible="false" android:checked="true"/>
-            <com.google.android.material.chip.Chip android:id="@+id/chipTop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tops" style="@style/Widget.Material3.Chip.Filter" app:checkedIconVisible="false"/>
-            <com.google.android.material.chip.Chip android:id="@+id/chipBottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bottoms" style="@style/Widget.Material3.Chip.Filter" app:checkedIconVisible="false"/>
-            <com.google.android.material.chip.Chip android:id="@+id/chipShoes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shoes" style="@style/Widget.Material3.Chip.Filter" app:checkedIconVisible="false"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"
+                android:checked="true"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tops"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bottoms"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipShoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shoes"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"/>
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 

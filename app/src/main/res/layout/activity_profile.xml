@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="STYLE ANALYTICS"
+                android:text="@string/style_analytics"
                 android:textColor="@color/white"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="WARDROBE DNA INSIGHTS"
+                android:text="@string/wardrobe_dna_insights"
                 android:textColor="@color/warm_gray"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="GENDER PREFERENCE"
+                android:text="@string/gender_preference"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -60,7 +60,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:text="@string/female"
                     android:textColor="@color/white"
                     app:chipBackgroundColor="@color/card_bg" />
 
@@ -69,7 +69,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Male"
+                    android:text="@string/male"
                     android:textColor="@color/white"
                     app:chipBackgroundColor="@color/card_bg" />
 
@@ -78,7 +78,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Non-binary"
+                    android:text="@string/non_binary"
                     android:textColor="@color/white"
                     app:chipBackgroundColor="@color/card_bg" />
             </com.google.android.material.chip.ChipGroup>
@@ -102,7 +102,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="CATEGORY DISTRIBUTION"
+                        android:text="@string/category_distribution"
                         android:textColor="@color/accent"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -119,7 +119,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="STYLE DNA"
+                android:text="@string/style_dna"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -145,16 +145,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="AESTHETIC"
+                        android:text="@string/aesthetic"
                         android:textColor="@color/accent"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.1"/>
-                    
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="MINIMALIST / CLASSIC"
+                        android:text="@string/minimalist_classic"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:layout_marginTop="4dp"/>
@@ -168,7 +168,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="STYLING CONTEXT"
+                        android:text="@string/styling_context"
                         android:textColor="@color/accent"
                         android:textSize="10sp"
                         android:textStyle="bold"
@@ -177,7 +177,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="CORPORATE / OFFICE"
+                        android:text="@string/corporate_office"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:layout_marginTop="4dp"/>

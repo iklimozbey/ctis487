@@ -123,6 +123,11 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, ProfileActivity::class.java))
                     false
                 }
+
+                R.id.nav_outfit_ai -> {
+                    startActivity(Intent(this, OutfitAiActivity::class.java))
+                    false
+                }
                 else -> false
             }
         }

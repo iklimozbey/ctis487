@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_marginTop="12dp"
-                android:text="WASH"
+                android:text="@string/wash"
                 android:textSize="11sp"
                 android:textColor="@color/black"
                 android:backgroundTint="@color/accent"
