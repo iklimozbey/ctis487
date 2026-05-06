@@ -25,11 +25,7 @@ class ItemDetailActivity : AppCompatActivity() {
         binding = ActivityItemDetailBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "wardrobe_db"
-        ).build()
+        val db = AppDatabase.getDatabase(this)
 
         val id = intent.getStringExtra("id") ?: return
         val btnSave = findViewById<android.widget.Button>(R.id.btnSave)
