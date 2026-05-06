@@ -112,6 +112,10 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, LaundryActivity::class.java))
                     false
                 }
+                R.id.nav_outfit_ai -> {
+                    startActivity(Intent(this, OutfitAiActivity::class.java))
+                    false
+                }
                 R.id.nav_profile -> {
                     startActivity(Intent(this, ProfileActivity::class.java))
                     false

@@ -31,6 +31,7 @@
         <activity android:name=".view.OotdActivity" />
         <activity android:name=".view.ProfileActivity" />
         <activity android:name=".view.ItemDetailActivity" />
+        <activity android:name=".view.OutfitAiActivity" />
 
     </application>
 
