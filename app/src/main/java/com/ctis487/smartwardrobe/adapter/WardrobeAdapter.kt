@@ -59,7 +59,8 @@ class WardrobeAdapter(
             // ✅ Native Image loading without Glide
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val stream = URL(item.imageUrl).openStream()
+                    val urlString = if (item.imageUrl.startsWith("http")) item.imageUrl else "http://10.0.2.2:3001${if (item.imageUrl.startsWith("/")) "" else "/"}${item.imageUrl}"
+                    val stream = URL(urlString).openStream()
                     val bitmap = BitmapFactory.decodeStream(stream)
                     withContext(Dispatchers.Main) {
                         holder.binding.imgItem.setImageBitmap(bitmap)
@@ -85,7 +86,8 @@ class WardrobeAdapter(
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val stream = URL(item.imageUrl).openStream()
+                    val urlString = if (item.imageUrl.startsWith("http")) item.imageUrl else "http://10.0.2.2:3001${if (item.imageUrl.startsWith("/")) "" else "/"}${item.imageUrl}"
+                    val stream = URL(urlString).openStream()
                     val bitmap = BitmapFactory.decodeStream(stream)
                     withContext(Dispatchers.Main) {
                         holder.binding.imgItem.setImageBitmap(bitmap)
