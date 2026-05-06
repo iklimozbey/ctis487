@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#0A0A0A</color>
-    <color name="white">#F5F3EF</color>
+    <color name="white">#FFFFFF</color>
     <color name="cream">#EDE9E1</color>
-    <color name="warm_gray">#B8B0A4</color>
-    <color name="accent">#C8A96E</color>
+    <color name="warm_gray">#A0A0A0</color>
+    <color name="accent">#C5A059</color>
     <color name="accent_dark">#A8893E</color>
     <color name="red">#C44B3A</color>
-    <color name="card_bg">#141414</color>
-    <color name="border_color">#2A2A2A</color>
-    <color name="text_muted">#666666</color>
+    <color name="card_bg">#121212</color>
+    <color name="border_color">#262626</color>
+    <color name="text_muted">#A0A0A0</color>
+    <color name="gray">#A0A0A0</color>
     
     <!-- Required base colors -->
-    <color name="purple_200">#C8A96E</color>
+    <color name="purple_200">#C5A059</color>
     <color name="purple_500">#A8893E</color>
     <color name="purple_700">#0A0A0A</color>
-    <color name="teal_200">#C8A96E</color>
+    <color name="teal_200">#C5A059</color>
     <color name="teal_700">#A8893E</color>
 </resources>

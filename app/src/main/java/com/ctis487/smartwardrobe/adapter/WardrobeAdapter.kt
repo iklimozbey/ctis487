@@ -1,14 +1,24 @@
 package com.ctis487.smartwardrobe.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import android.graphics.BitmapFactory
+import java.net.URL
 import com.ctis487.smartwardrobe.databinding.ItemClosetBinding
 import com.ctis487.smartwardrobe.databinding.ItemLaundryBinding
-import com.ctis487.smartwardrobe.model.ClothingItem
+import com.ctis487.smartwardrobe.db.ClothingItem
 
 class WardrobeAdapter(
-    private var items: List<ClothingItem>
+    private var items: List<ClothingItem>,
+    private val onDeleteClick: (ClothingItem) -> Unit,
+    private val onLaundryClick: (ClothingItem) -> Unit,
+    private val onItemClick: (ClothingItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -16,11 +26,17 @@ class WardrobeAdapter(
         const val VIEW_TYPE_LAUNDRY = 2
     }
 
-    class ClosetViewHolder(val binding: ItemClosetBinding) : RecyclerView.ViewHolder(binding.root)
-    class LaundryViewHolder(val binding: ItemLaundryBinding) : RecyclerView.ViewHolder(binding.root)
+    class ClosetViewHolder(val binding: ItemClosetBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    class LaundryViewHolder(val binding: ItemLaundryBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun getItemViewType(position: Int): Int {
-        return if (items[position].status == "closet") VIEW_TYPE_CLOSET else VIEW_TYPE_LAUNDRY
+        return if (items[position].status == "closet")
+            VIEW_TYPE_CLOSET
+        else
+            VIEW_TYPE_LAUNDRY
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,17 +50,63 @@ class WardrobeAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
-        // We leave actual content fetching here but simple assignments for now
+
         if (holder is ClosetViewHolder) {
-            holder.binding.tvCategory.text = item.subcategory
-            // Using placeholder logic or Coil if external library used
-            // holder.binding.imgItem.load(item.imageUrl)
-        } else if (holder is LaundryViewHolder) {
-            holder.binding.tvCategory.text = item.subcategory
+            holder.binding.tvCategory.text = item.subcategory ?: "Unknown"
+            holder.binding.tvColor.text = item.color ?: "N/A"
+            holder.binding.tvTag.text = item.subcategory?.split(" ")?.last()?.uppercase() ?: "ITEM"
+
+            // ✅ Native Image loading without Glide
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val stream = URL(item.imageUrl).openStream()
+                    val bitmap = BitmapFactory.decodeStream(stream)
+                    withContext(Dispatchers.Main) {
+                        holder.binding.imgItem.setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            holder.binding.btnDelete.setOnClickListener {
+                onDeleteClick(item)
+            }
+
+            holder.binding.btnLaundry.setOnClickListener {
+                onLaundryClick(item)
+            }
+            holder.binding.root.setOnClickListener {
+                onItemClick(item)
+            }
+        }
+        else if (holder is LaundryViewHolder) {
+            holder.binding.tvCategory.text = item.subcategory ?: "Unknown"
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val stream = URL(item.imageUrl).openStream()
+                    val bitmap = BitmapFactory.decodeStream(stream)
+                    withContext(Dispatchers.Main) {
+                        holder.binding.imgItem.setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            holder.binding.btnLaundry.setOnClickListener {
+                onLaundryClick(item)
+            }
+
+            holder.binding.btnDelete.setOnClickListener {
+                onDeleteClick(item)
+            }
         }
     }
+
     override fun getItemCount() = items.size
-    
+
     fun updateItems(newItems: List<ClothingItem>) {
         items = newItems
         notifyDataSetChanged()
