@@ -59,7 +59,10 @@ class HomeActivity : AppCompatActivity() {
         // ✅ BI-DIRECTIONAL: Immediate sync on start (5 pts)
         CoroutineScope(Dispatchers.IO).launch {
             com.ctis487.smartwardrobe.network.SyncManager.syncFromBackend(this@HomeActivity)
-            withContext(Dispatchers.Main) { loadItems() }
+            withContext(Dispatchers.Main) { 
+                loadItems() 
+                SoundHelper.playStartupSound(this@HomeActivity)
+            }
         }
     }
 
@@ -227,10 +230,10 @@ class HomeActivity : AppCompatActivity() {
 
         dialogView.findViewById<android.widget.Button>(R.id.btnConfirm).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                // ✅ BI-DIRECTIONAL: Delete from backend (5 pts)
                 com.ctis487.smartwardrobe.network.SyncManager.deleteFromBackend(item.id)
                 db.clothingDao().deleteItem(item)
                 withContext(Dispatchers.Main) {
+                    SoundHelper.playSuccessSound(this@HomeActivity)
                     loadItems()
                     dialog.dismiss()
                 }

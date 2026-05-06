@@ -115,10 +115,12 @@ class LaundryActivity : AppCompatActivity() {
 
     private fun deleteItem(item: ClothingItem) {
         CoroutineScope(Dispatchers.IO).launch {
-            // ✅ BI-DIRECTIONAL: Delete from backend (5 pts)
             com.ctis487.smartwardrobe.network.SyncManager.deleteFromBackend(item.id)
             db.clothingDao().deleteItem(item)
-            loadItems()
+            withContext(Dispatchers.Main) {
+                com.ctis487.smartwardrobe.utils.SoundHelper.playSuccessSound(this@LaundryActivity)
+                loadItems()
+            }
         }
     }
 

@@ -16,4 +16,16 @@ object SoundHelper {
             e.printStackTrace()
         }
     }
+
+    fun playStartupSound(context: Context) {
+        try {
+            val mediaPlayer = MediaPlayer.create(context, R.raw.startup_sound)
+            mediaPlayer?.setOnCompletionListener { mp -> 
+                mp.release() 
+            }
+            mediaPlayer?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
