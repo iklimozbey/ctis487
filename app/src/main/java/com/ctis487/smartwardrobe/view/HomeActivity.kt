@@ -137,10 +137,24 @@ class HomeActivity : AppCompatActivity() {
             else -> null
         }
 
+        val topKeywords = listOf("top", "shirt", "t-shirt", "blouse", "sweater", "tank", "hoodie")
+        val bottomKeywords = listOf("bottom", "pants", "jeans", "skirt", "shorts", "trouser")
+        val shoesKeywords = listOf("shoe", "sneaker", "boot", "sandal", "heel", "flat")
+        val outerwearKeywords = listOf("outerwear", "jacket", "coat", "blazer", "cardigan")
+
         CoroutineScope(Dispatchers.IO).launch {
             val dbItems = db.clothingDao().getClosetItems()
             val filteredItems = if (categoryFilter != null) {
-                dbItems.filter { it.subcategory?.contains(categoryFilter, ignoreCase = true) == true }
+                dbItems.filter { item ->
+                    val sub = item.subcategory?.lowercase() ?: ""
+                    when (categoryFilter) {
+                        "top" -> topKeywords.any { sub.contains(it) }
+                        "bottom" -> bottomKeywords.any { sub.contains(it) }
+                        "shoes" -> shoesKeywords.any { sub.contains(it) }
+                        "outerwear" -> outerwearKeywords.any { sub.contains(it) }
+                        else -> false
+                    }
+                }
             } else {
                 dbItems
             }
