@@ -29,6 +29,9 @@ interface ApiService {
         @retrofit2.http.Body status: Map<String, String>
     ): Call<ResponseBody>
 
+    @POST("api/search")
+    fun searchOutfit(@retrofit2.http.Body request: OutfitSearchRequest): Call<OutfitSearchResponse>
+
     @GET("api/health")
     fun getHealth(): Call<ResponseBody>
 }
