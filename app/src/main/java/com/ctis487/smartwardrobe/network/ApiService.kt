@@ -1,3 +1,6 @@
+package com.ctis487.smartwardrobe.network
+
+import com.ctis487.smartwardrobe.db.ClothingItem
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,7 +17,18 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Call<ResponseBody>
 
-    // ✅ ADD THIS
+    @GET("api/items")
+    fun getItems(): Call<ItemsResponse>
+
+    @retrofit2.http.DELETE("api/items/{id}")
+    fun deleteItem(@retrofit2.http.Path("id") id: String): Call<ResponseBody>
+
+    @retrofit2.http.PUT("api/items/{id}/status")
+    fun updateStatus(
+        @retrofit2.http.Path("id") id: String,
+        @retrofit2.http.Body status: Map<String, String>
+    ): Call<ResponseBody>
+
     @GET("api/health")
     fun getHealth(): Call<ResponseBody>
 }

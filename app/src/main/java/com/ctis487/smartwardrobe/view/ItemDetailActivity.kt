@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.room.Room
-import com.bumptech.glide.Glide
+import android.graphics.BitmapFactory
+import java.net.URL
 import com.ctis487.smartwardrobe.R
 import com.ctis487.smartwardrobe.databinding.ActivityItemDetailBinding
 import com.ctis487.smartwardrobe.db.AppDatabase
@@ -36,11 +37,19 @@ class ItemDetailActivity : AppCompatActivity() {
 
         val img = findViewById<android.widget.ImageView>(R.id.imgDetail)
 
-        Glide.with(this)
-            .load(imageUrl)
-            .placeholder(android.R.color.darker_gray)
-            .error(android.R.color.holo_red_dark)
-            .into(img)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (!imageUrl.isNullOrEmpty()) {
+                    val stream = URL(imageUrl).openStream()
+                    val bitmap = BitmapFactory.decodeStream(stream)
+                    kotlinx.coroutines.withContext(Dispatchers.Main) {
+                        img.setImageBitmap(bitmap)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
         val category = intent.getStringExtra("subcategory")
         val color = intent.getStringExtra("color")
@@ -50,8 +59,17 @@ class ItemDetailActivity : AppCompatActivity() {
 
         etCategory.setText(category ?: "")
         etColor.setText(color ?: "")
+        
+        val colorCircle = findViewById<com.ctis487.smartwardrobe.customview.CircularColorView>(R.id.colorCircle)
+        colorCircle.setColor(color ?: "#CCCCCC")
 
-
+        etColor.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                colorCircle.setColor(s.toString())
+            }
+        })
 
         btnSave.setOnClickListener {
 

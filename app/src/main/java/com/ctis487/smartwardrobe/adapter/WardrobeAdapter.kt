@@ -4,7 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import android.graphics.BitmapFactory
+import java.net.URL
 import com.ctis487.smartwardrobe.databinding.ItemClosetBinding
 import com.ctis487.smartwardrobe.databinding.ItemLaundryBinding
 import com.ctis487.smartwardrobe.db.ClothingItem
@@ -47,29 +52,22 @@ class WardrobeAdapter(
         val item = items[position]
 
         if (holder is ClosetViewHolder) {
-            holder.binding.tvCategory.text = item.subcategory
+            holder.binding.tvCategory.text = item.subcategory ?: "Unknown"
+            holder.binding.tvColor.text = item.color ?: "N/A"
+            holder.binding.tvTag.text = item.subcategory?.split(" ")?.last()?.uppercase() ?: "ITEM"
 
-            Log.d("IMAGE_URL", item.imageUrl)
-
-            val context = holder.itemView.context
-
-            // ✅ Image loading
-            Glide.with(context)
-                .load(item.imageUrl)
-                .placeholder(android.R.color.darker_gray)
-                .error(android.R.color.darker_gray)
-                .centerCrop()
-                .into(holder.binding.imgItem)
-
-            // 🔁 Retry
-            holder.binding.imgItem.postDelayed({
-                Glide.with(context)
-                    .load(item.imageUrl)
-                    .centerCrop()
-                    .into(holder.binding.imgItem)
-            }, 1200)
-
-
+            // ✅ Native Image loading without Glide
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val stream = URL(item.imageUrl).openStream()
+                    val bitmap = BitmapFactory.decodeStream(stream)
+                    withContext(Dispatchers.Main) {
+                        holder.binding.imgItem.setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
 
             holder.binding.btnDelete.setOnClickListener {
                 onDeleteClick(item)
@@ -81,20 +79,21 @@ class WardrobeAdapter(
             holder.binding.root.setOnClickListener {
                 onItemClick(item)
             }
-
         }
         else if (holder is LaundryViewHolder) {
-            holder.binding.tvCategory.text = item.subcategory
+            holder.binding.tvCategory.text = item.subcategory ?: "Unknown"
 
-            val context = holder.itemView.context
-
-            Glide.with(context)
-                .load(item.imageUrl)
-                .placeholder(android.R.color.darker_gray)
-                .error(android.R.color.darker_gray)
-                .centerCrop()
-                .into(holder.binding.imgItem)
-
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val stream = URL(item.imageUrl).openStream()
+                    val bitmap = BitmapFactory.decodeStream(stream)
+                    withContext(Dispatchers.Main) {
+                        holder.binding.imgItem.setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
 
             holder.binding.btnLaundry.setOnClickListener {
                 onLaundryClick(item)

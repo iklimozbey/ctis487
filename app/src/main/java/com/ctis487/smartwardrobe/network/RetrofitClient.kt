@@ -1,6 +1,6 @@
 package com.ctis487.smartwardrobe.network
 
-import ApiService
+import com.ctis487.smartwardrobe.network.ApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
