@@ -55,7 +55,11 @@ class OutfitAiActivity : AppCompatActivity() {
         binding.tvOutfitName.visibility = View.GONE
         binding.recyclerViewAiItems.alpha = 0.5f
 
-        val request = OutfitSearchRequest(query)
+        val prefs = getSharedPreferences("SmartWardrobePrefs", MODE_PRIVATE)
+        val gender = prefs.getString("gender_preference", "Female")
+        val finalQuery = "$query (Style preference: $gender)"
+
+        val request = OutfitSearchRequest(finalQuery)
         RetrofitClient.instance.searchOutfit(request).enqueue(object : Callback<OutfitSearchResponse> {
             override fun onResponse(call: Call<OutfitSearchResponse>, response: Response<OutfitSearchResponse>) {
                 binding.progressBar.visibility = View.GONE

@@ -30,6 +30,29 @@ class ProfileActivity : AppCompatActivity() {
 
         setupBottomNavigation()
         loadChartData()
+        setupGenderPreference()
+    }
+
+    private fun setupGenderPreference() {
+        val prefs = getSharedPreferences("SmartWardrobePrefs", MODE_PRIVATE)
+        val savedGender = prefs.getString("gender_preference", "Female") // Default Female
+
+        when (savedGender) {
+            "Male" -> binding.chipGroupGender.check(R.id.chipMale)
+            "Non-binary" -> binding.chipGroupGender.check(R.id.chipNonBinary)
+            else -> binding.chipGroupGender.check(R.id.chipFemale)
+        }
+
+        binding.chipGroupGender.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                val selectedGender = when (checkedIds[0]) {
+                    R.id.chipMale -> "Male"
+                    R.id.chipNonBinary -> "Non-binary"
+                    else -> "Female"
+                }
+                prefs.edit().putString("gender_preference", selectedGender).apply()
+            }
+        }
     }
 
     override fun onResume() {
