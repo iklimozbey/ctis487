@@ -53,7 +53,6 @@ class OutfitAiActivity : AppCompatActivity() {
     private fun generateOutfit(query: String) {
         binding.progressBar.visibility = View.VISIBLE
         binding.tvOutfitName.visibility = View.GONE
-        binding.tvOutfitReason.visibility = View.GONE
         binding.recyclerViewAiItems.alpha = 0.5f
 
         val request = OutfitSearchRequest(query)
@@ -69,10 +68,8 @@ class OutfitAiActivity : AppCompatActivity() {
                     if (outfit != null) {
                         SoundHelper.playSuccessSound(this@OutfitAiActivity)
                         binding.tvOutfitName.text = outfit.name
-                        binding.tvOutfitReason.text = outfit.reasoning
                         
                         binding.tvOutfitName.visibility = View.VISIBLE
-                        binding.tvOutfitReason.visibility = View.VISIBLE
                         
                         adapter.updateItems(outfit.items)
                     } else {
