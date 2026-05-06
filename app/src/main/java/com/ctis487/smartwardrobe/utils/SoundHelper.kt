@@ -8,6 +8,7 @@ object SoundHelper {
     fun playSuccessSound(context: Context) {
         try {
             val mediaPlayer = MediaPlayer.create(context, R.raw.success_sound)
+            mediaPlayer?.setVolume(1.0f, 1.0f)
             mediaPlayer?.setOnCompletionListener { mp -> 
                 mp.release() 
             }
@@ -20,6 +21,7 @@ object SoundHelper {
     fun playStartupSound(context: Context) {
         try {
             val mediaPlayer = MediaPlayer.create(context, R.raw.startup_sound)
+            mediaPlayer?.setVolume(1.0f, 1.0f)
             mediaPlayer?.setOnCompletionListener { mp -> 
                 mp.release() 
             }
