@@ -38,6 +38,12 @@ android {
         jvmTarget = "17"
     }
 
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    }
+
     buildFeatures {
         viewBinding = true
     }
@@ -68,6 +74,7 @@ dependencies {
     // External Libraries (Animation and Charts)
     implementation(libs.lottie)
     implementation(libs.mpandroidchart)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Testing
     testImplementation(libs.junit)

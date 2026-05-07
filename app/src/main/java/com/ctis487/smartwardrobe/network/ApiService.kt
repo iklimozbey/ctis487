@@ -1,14 +1,10 @@
 package com.ctis487.smartwardrobe.network
 
-import com.ctis487.smartwardrobe.db.ClothingItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -22,17 +18,37 @@ interface ApiService {
     @GET("api/items")
     fun getItems(): Call<ItemsResponse>
 
-    @retrofit2.http.DELETE("api/items/{id}")
-    fun deleteItem(@retrofit2.http.Path("id") id: String): Call<ResponseBody>
+    @DELETE("api/items/{id}")
+    fun deleteItem(@Path("id") id: String): Call<ResponseBody>
 
-    @retrofit2.http.PUT("api/items/{id}/status")
+    @PUT("api/items/{id}/status")
     fun updateStatus(
-        @retrofit2.http.Path("id") id: String,
-        @retrofit2.http.Body status: Map<String, String>
+        @Path("id") id: String,
+        @Body status: Map<String, String>
     ): Call<ResponseBody>
 
+    @POST("api/items/{id}/worn")
+    fun markItemWorn(@Path("id") id: String): Call<ResponseBody>
+
     @POST("api/search")
-    fun searchOutfit(@retrofit2.http.Body request: OutfitSearchRequest): Call<OutfitSearchResponse>
+    fun searchOutfit(@Body request: OutfitSearchRequest): Call<OutfitSearchResponse>
+
+    // Weather
+    @GET("api/weather")
+    fun getWeather(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("city") city: String? = null,
+        @Query("date") date: String? = null,
+        @Query("hourly") hourly: Boolean = false
+    ): Call<WeatherResponse>
+
+    // Reverse geocoding
+    @GET("api/weather/reverse-geocode")
+    fun reverseGeocode(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double
+    ): Call<GeoResponse>
 
     @GET("api/health")
     fun getHealth(): Call<ResponseBody>
