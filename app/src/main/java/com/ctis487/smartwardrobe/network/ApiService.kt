@@ -2,6 +2,7 @@ package com.ctis487.smartwardrobe.network
 
 import com.ctis487.smartwardrobe.db.ClothingItem
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
@@ -14,7 +15,8 @@ interface ApiService {
     @Multipart
     @POST("api/items")
     fun uploadImage(
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Part("options") options: RequestBody
     ): Call<ResponseBody>
 
     @GET("api/items")
