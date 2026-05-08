@@ -96,10 +96,19 @@ class ProfileActivity : AppCompatActivity() {
                 
                 dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
                 dataSet.valueTextColor = Color.WHITE
-                dataSet.valueTextSize = 14f
-
+                dataSet.valueTextSize = 12f
+                
+                // Fix overlapping text by drawing labels outside the slices
+                dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+                dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+                dataSet.valueLineColor = Color.WHITE
+                dataSet.valueLinePart1Length = 0.4f
+                dataSet.valueLinePart2Length = 0.4f
+                
                 val pieData = PieData(dataSet)
                 binding.pieChart.data = pieData
+                binding.pieChart.setEntryLabelColor(Color.WHITE)
+                binding.pieChart.setEntryLabelTextSize(10f)
                 binding.pieChart.description.isEnabled = false
                 binding.pieChart.centerText = "Wardrobe"
                 binding.pieChart.setCenterTextColor(Color.WHITE)

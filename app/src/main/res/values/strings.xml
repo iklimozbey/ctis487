@@ -69,7 +69,7 @@
     <string name="expert_reasoning">EXPERT REASONING</string>
     <string name="analyzing_dna">Analyzing DNA...</string>
     <string name="environment">ENVIRONMENT</string>
-    <string name="weather">22 Degrees</string>
+    <string name="weather">🌡️ Fetching...</string>
     <string name="events">0 EVENTS</string>
     <string name="regenerate_look">REGENERATE LOOK</string>
 

@@ -163,31 +163,30 @@ class OotdActivity : AppCompatActivity() {
                 // 1. Fetch hourly weather
                 withContext(Dispatchers.Main) { showLoading("Checking weather in $city...") }
                 var weatherCtx: WeatherContext? = null
-                var weatherDisplayText = "📍 $city"
+                var weatherDisplayText = "Unknown"
 
                 if (lat != null && lon != null) {
                     try {
-                        val wRes = RetrofitClient.instance.getWeather(
-                            lat = lat, lon = lon, city = city, date = today, hourly = true
+                        val wRes = com.ctis487.smartwardrobe.network.WeatherRetrofitClient.instance.getCurrentWeather(
+                            lat = lat, lon = lon
                         ).execute()
                         if (wRes.isSuccessful) {
-                            val w = wRes.body()
-                            // Pick daytime hour (noon or current)
-                            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY).coerceIn(0, 23)
-                            val hourData = w?.hourly?.getOrNull(hour) ?: w?.hourly?.getOrNull(12)
-                            val temp = hourData?.temp ?: w?.temp
-                            val cond = hourData?.condition ?: w?.conditionText
-                            val icon = hourData?.icon ?: w?.icon ?: "🌤️"
+                            val w = wRes.body()?.currentWeather
+                            val temp = w?.temperature
+                            val isDay = w?.is_day
+                            val icon = if (isDay == 1) "☀️" else "🌙"
 
                             weatherCtx = WeatherContext(
                                 temp = temp,
-                                conditionText = cond,
+                                conditionText = "Clear", // Open-Meteo provides weathercode, but keeping it simple
                                 city = city,
                                 icon = icon
                             )
-                            weatherDisplayText = "$icon ${temp}°C · ${cond ?: ""}"
+                            weatherDisplayText = "$icon ${temp}°C"
                         }
-                    } catch (_: Exception) {}
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
 
                 // 2. Build OOTD query (mirrors the frontend's exact prompt)
@@ -227,7 +226,7 @@ class OotdActivity : AppCompatActivity() {
     // ── Rendering ────────────────────────────────────────────────
     private fun renderOotd(outfit: OutfitResult, weatherText: String, city: String) {
         // Update weather / badge pills
-        binding.tvWeather.text = "🌡️ $weatherText"
+        binding.tvWeather.text = weatherText
         binding.tvEvents.text = "📍 $city"
         binding.tvOotdBadge.text = "Stylist's Pick"
 
