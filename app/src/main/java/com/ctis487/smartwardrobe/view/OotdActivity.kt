@@ -172,7 +172,7 @@ class OotdActivity : AppCompatActivity() {
                         ).execute()
                         if (wRes.isSuccessful) {
                             val w = wRes.body()?.currentWeather
-                            val temp = w?.temperature
+                            val temp = w?.temperature?.toInt()
                             val isDay = w?.is_day
                             val icon = if (isDay == 1) "☀️" else "🌙"
 
