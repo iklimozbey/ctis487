@@ -137,12 +137,15 @@ class OotdActivity : AppCompatActivity() {
                     val lon = location.longitude
                     withContext(Dispatchers.Main) { showLoading("Checking weather...") }
 
-                    // Reverse geocode via backend proxy
+                    // Reverse geocode via external API
                     var city = "Your Area"
                     try {
-                        val geoRes = RetrofitClient.instance.reverseGeocode(lat, lon).execute()
-                        if (geoRes.isSuccessful) city = geoRes.body()?.city ?: "Your Area"
-                    } catch (_: Exception) {}
+                        val geoRes = ExternalRetrofit.geo.reverseGeocode(lat, lon).execute()
+                        if (geoRes.isSuccessful) {
+                            val data = geoRes.body()
+                            city = data?.city ?: data?.locality ?: data?.principalSubdivision ?: "Your Area"
+                        }
+                    } catch (e: Exception) { e.printStackTrace() }
 
                     generateOotdWithCoords(lat, lon, city)
                 } else {
@@ -167,18 +170,16 @@ class OotdActivity : AppCompatActivity() {
 
                 if (lat != null && lon != null) {
                     try {
-                        val wRes = com.ctis487.smartwardrobe.network.WeatherRetrofitClient.instance.getCurrentWeather(
-                            lat = lat, lon = lon
-                        ).execute()
+                        val wRes = ExternalRetrofit.weather.getForecast(lat = lat, lon = lon).execute()
                         if (wRes.isSuccessful) {
-                            val w = wRes.body()?.currentWeather
+                            val w = wRes.body()?.current_weather
                             val temp = w?.temperature
-                            val isDay = w?.is_day
-                            val icon = if (isDay == 1) "☀️" else "🌙"
+                            val code = w?.weathercode ?: 0
+                            val icon = if (code in 0..2) "☀️" else "☁️"
 
                             weatherCtx = WeatherContext(
                                 temp = temp,
-                                conditionText = "Clear", // Open-Meteo provides weathercode, but keeping it simple
+                                conditionText = "Clear", // simplified
                                 city = city,
                                 icon = icon
                             )
