@@ -1,30 +1,5 @@
 package com.ctis487.smartwardrobe.network
 
-// ── Weather ────────────────────────────────────────────────────
-data class WeatherResponse(
-    val success: Boolean,
-    val city: String?,
-    val temp: Int?,
-    val conditionText: String?,
-    val icon: String?,
-    val lat: Double?,
-    val lon: Double?,
-    val date: String?,
-    val hourly: List<HourlyWeather>?
-)
-
-data class HourlyWeather(
-    val time: String,
-    val temp: Int,
-    val condition: String,
-    val icon: String
-)
-
-data class GeoResponse(
-    val success: Boolean,
-    val city: String?
-)
-
 // ── Search / OOTD ──────────────────────────────────────────────
 data class OutfitSearchRequest(
     val query: String,
