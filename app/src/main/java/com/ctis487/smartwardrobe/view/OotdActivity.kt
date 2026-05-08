@@ -73,11 +73,37 @@ class OotdActivity : AppCompatActivity() {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
             location?.let {
-                binding.tvWeather.text = "Lat: ${String.format("%.2f", it.latitude)}, Lon: ${String.format("%.2f", it.longitude)}"
+                binding.tvWeather.text = "Fetching weather..."
+                fetchWeather(it.latitude, it.longitude)
             }
         } catch (e: Exception) {
             binding.tvWeather.text = "Weather Unavailable"
         }
+    }
+
+    private fun fetchWeather(lat: Double, lon: Double) {
+        com.ctis487.smartwardrobe.network.WeatherRetrofitClient.instance.getCurrentWeather(lat, lon)
+            .enqueue(object : retrofit2.Callback<com.ctis487.smartwardrobe.network.WeatherResponse> {
+                override fun onResponse(
+                    call: retrofit2.Call<com.ctis487.smartwardrobe.network.WeatherResponse>,
+                    response: retrofit2.Response<com.ctis487.smartwardrobe.network.WeatherResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val temp = response.body()?.currentWeather?.temperature
+                        val isDay = response.body()?.currentWeather?.is_day
+                        val icon = if (isDay == 1) "☀️" else "🌙"
+                        if (temp != null) {
+                            binding.tvWeather.text = "$icon $temp°C"
+                        }
+                    } else {
+                        binding.tvWeather.text = "⚠️ API Error"
+                    }
+                }
+
+                override fun onFailure(call: retrofit2.Call<com.ctis487.smartwardrobe.network.WeatherResponse>, t: Throwable) {
+                    binding.tvWeather.text = "⚠️ Net Error"
+                }
+            })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
