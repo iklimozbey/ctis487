@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ctis487.smartwardrobe.R
 import com.ctis487.smartwardrobe.adapter.WardrobeAdapter
 import com.ctis487.smartwardrobe.databinding.ActivityOutfitAiBinding
+import com.ctis487.smartwardrobe.db.ClothingItem
 import com.ctis487.smartwardrobe.network.OutfitSearchRequest
 import com.ctis487.smartwardrobe.network.OutfitSearchResponse
 import com.ctis487.smartwardrobe.network.RetrofitClient
@@ -74,8 +75,17 @@ class OutfitAiActivity : AppCompatActivity() {
                         binding.tvOutfitName.text = outfit.name
                         
                         binding.tvOutfitName.visibility = View.VISIBLE
-                        
-                        adapter.updateItems(outfit.items)
+
+                        val clothingItems = outfit.items?.map { item ->
+                            ClothingItem(
+                                id = item.id ?: "",
+                                imageUrl = item.imageUrl ?: "",
+                                subcategory = item.subcategory,
+                                color = item.primaryColor,
+                                status = "closet"
+                            )
+                        } ?: emptyList()
+                        adapter.updateItems(clothingItems)
                     } else {
                         Toast.makeText(this@OutfitAiActivity, body?.message ?: "No outfit found.", Toast.LENGTH_LONG).show()
                     }

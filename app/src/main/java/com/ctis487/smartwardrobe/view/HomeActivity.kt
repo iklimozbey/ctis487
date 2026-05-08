@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class HomeActivity : AppCompatActivity() {
@@ -123,6 +124,11 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, ProfileActivity::class.java))
                     false
                 }
+
+                R.id.nav_outfit_ai -> {
+                    startActivity(Intent(this, OutfitAiActivity::class.java))
+                    false
+                }
                 else -> false
             }
         }
@@ -185,9 +191,13 @@ class HomeActivity : AppCompatActivity() {
                 inputStream?.use { input -> file.outputStream().use { output -> input.copyTo(output) } }
 
                 val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                val imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
-                val response = RetrofitClient.instance.uploadImage(body).execute()
+                // Direct AI Transformation: background removal then Nanobana
+                val optionsJson = """{"removeBg":true,"useSegformer":false,"useI2I":false,"useT2I":false,"useDirectAI":true,"directModel":"nanobana-basic"}"""
+                val optionsPart = optionsJson.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val response = RetrofitClient.instance.uploadImage(imagePart, optionsPart).execute()
                 if (response.isSuccessful) {
                     val result = response.body()?.string() ?: ""
                     val json = org.json.JSONObject(result)

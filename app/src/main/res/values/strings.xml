@@ -1,22 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- General -->
     <string name="app_name">Smart Wardrobe</string>
+    <string name="success">Success!</string>
+    <string name="error">Something went wrong</string>
+    <string name="loading">Analyzing with AI...</string>
+    <string name="welcome">Welcome to your Smart Closet</string>
+    <string name="location_permission">Location permission needed for weather based suggestions</string>
+
+    <!-- Bottom Navigation -->
     <string name="tab_closet">Closet</string>
     <string name="tab_laundry">Laundry</string>
     <string name="tab_ootd">AI Stylist</string>
     <string name="tab_profile">Profile</string>
+    <string name="tab_outfit_ai">Outfit AI</string>
+
+    <!-- Home -->
+    <string name="my_closet">MY CLOSET</string>
+    <string name="wardrobe_dna">WARDROBE DNA</string>
+    <string name="wardrobe_stats">Wardrobe Analytics</string>
+
+    <!-- Categories -->
+    <string name="all">All</string>
+    <string name="tops">Tops</string>
+    <string name="bottoms">Bottoms</string>
+    <string name="shoes">Shoes</string>
+    <string name="outerwear">Outerwear</string>
+
+    <!-- Item Actions -->
     <string name="add_item">Add Item</string>
     <string name="delete_item">Delete</string>
     <string name="move_to_laundry">Wash</string>
     <string name="move_to_closet">Cleaned</string>
+    <string name="wash">WASH</string>
+
+    <!-- Detail -->
+    <string name="item_detail">ITEM DETAIL</string>
+    <string name="identification">IDENTIFICATION</string>
     <string name="category">Category</string>
     <string name="color">Color</string>
+    <string name="color_metadata">COLOR METADATA</string>
+    <string name="color_hint">Color Hex/Name</string>
     <string name="save">Save Changes</string>
-    <string name="loading">Analyzing with AI...</string>
-    <string name="success">Success!</string>
-    <string name="error">Something went wrong</string>
-    <string name="wardrobe_stats">Wardrobe Analytics</string>
+    <string name="save_changes">SAVE CHANGES</string>
+
+    <!-- Laundry -->
+    <string name="laundry_basket">LAUNDRY BASKET</string>
+    <string name="items_need_washing">ITEMS NEED WASHING</string>
+    <string name="laundry">LAUNDRY</string>
+    <string name="restore_to_closet">RESTORE TO CLOSET</string>
+
+    <!-- Delete Dialog -->
+    <string name="delete_item_title">Delete Item?</string>
+    <string name="delete_message">This action cannot be undone.</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Outfit AI -->
+    <string name="outfit_ai">Outfit AI</string>
+    <string name="search_hint">e.g. smart casual for Friday dinner...</string>
+    <string name="generate_output">Generate Output</string>
+
+    <!-- OOTD -->
     <string name="ootd_title">Outfit of the Day</string>
     <string name="generate_ootd">Generate Outfit</string>
-    <string name="welcome">Welcome to your Smart Closet</string>
-    <string name="location_permission">Location permission needed for weather based suggestions</string>
+    <string name="stylists_pick">Stylists Pick</string>
+    <string name="weekend_minimalist">THE WEEKEND MINIMALIST</string>
+    <string name="expert_reasoning">EXPERT REASONING</string>
+    <string name="analyzing_dna">Analyzing DNA...</string>
+    <string name="environment">ENVIRONMENT</string>
+    <string name="weather">22 Degrees</string>
+    <string name="events">0 EVENTS</string>
+    <string name="regenerate_look">REGENERATE LOOK</string>
+
+    <!-- Profile -->
+    <string name="style_analytics">STYLE ANALYTICS</string>
+    <string name="wardrobe_dna_insights">WARDROBE DNA INSIGHTS</string>
+    <string name="gender_preference">GENDER PREFERENCE</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="non_binary">Non-binary</string>
+    <string name="category_distribution">CATEGORY DISTRIBUTION</string>
+    <string name="style_dna">STYLE DNA</string>
+    <string name="aesthetic">AESTHETIC</string>
+    <string name="minimalist_classic">MINIMALIST / CLASSIC</string>
+    <string name="styling_context">STYLING CONTEXT</string>
+    <string name="corporate_office">CORPORATE / OFFICE</string>
+
 </resources>

@@ -1,22 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- General -->
     <string name="app_name">Akıllı Gardırop</string>
+    <string name="success">Başarılı!</string>
+    <string name="error">Bir hata oluştu</string>
+    <string name="loading">Yapay zeka analiz ediyor...</string>
+    <string name="welcome">Akıllı Gardırobuna Hoş Geldin</string>
+    <string name="location_permission">Hava durumu tabanlı öneriler için konum izni gerekli</string>
+
+    <!-- Bottom Navigation -->
     <string name="tab_closet">Gardırop</string>
-    <string name="tab_laundry">Kirli Sepeti</string>
-    <string name="tab_ootd">Yapay Zeka Stilist</string>
+    <string name="tab_laundry">Çamaşır</string>
+    <string name="tab_ootd">AI Stilist</string>
     <string name="tab_profile">Profil</string>
-    <string name="add_item">Eşya Ekle</string>
+    <string name="tab_outfit_ai">Kombin AI</string>
+
+    <!-- Home -->
+    <string name="my_closet">GARDIROBUM</string>
+    <string name="wardrobe_dna">GARDIROP DNA</string>
+    <string name="wardrobe_stats">Gardırop Analitiği</string>
+
+    <!-- Categories -->
+    <string name="all">Tümü</string>
+    <string name="tops">Üstler</string>
+    <string name="bottoms">Altlar</string>
+    <string name="shoes">Ayakkabılar</string>
+    <string name="outerwear">Dış Giyim</string>
+
+    <!-- Item Actions -->
+    <string name="add_item">Ürün Ekle</string>
     <string name="delete_item">Sil</string>
     <string name="move_to_laundry">Yıka</string>
     <string name="move_to_closet">Temizlendi</string>
+    <string name="wash">YIKA</string>
+
+    <!-- Detail -->
+    <string name="item_detail">ÜRÜN DETAYI</string>
+    <string name="identification">TANIMLAMA</string>
     <string name="category">Kategori</string>
     <string name="color">Renk</string>
+    <string name="color_metadata">RENK METADATASI</string>
+    <string name="color_hint">Renk Hex/İsim</string>
     <string name="save">Değişiklikleri Kaydet</string>
-    <string name="loading">Yapay Zeka ile Analiz Ediliyor...</string>
-    <string name="success">Başarılı!</string>
-    <string name="error">Bir şeyler ters gitti</string>
-    <string name="wardrobe_stats">Gardırop Analitiği</string>
-    <string name="ootd_title">Günün Kıyafeti</string>
-    <string name="generate_ootd">Kıyafet Oluştur</string>
-    <string name="welcome">Akıllı Gardırobunuza Hoş Geldiniz</string>
-    <string name="location_permission">Hava durumuna göre öneriler için konum izni gereklidir</string>
+    <string name="save_changes">DEĞİŞİKLİKLERİ KAYDET</string>
+
+    <!-- Laundry -->
+    <string name="laundry_basket">ÇAMAŞIR SEPETİ</string>
+    <string name="items_need_washing">YIKANMASI GEREKENLER</string>
+    <string name="laundry">ÇAMAŞIR</string>
+    <string name="restore_to_closet">GARDIROBA GERİ TAŞIT</string>
+
+    <!-- Delete Dialog -->
+    <string name="delete_item_title">Ürün Silinsin mi?</string>
+    <string name="delete_message">Bu işlem geri alınamaz.</string>
+    <string name="cancel">İptal</string>
+
+    <!-- Outfit AI -->
+    <string name="outfit_ai">Kombin AI</string>
+    <string name="search_hint">örneğin cuma akşamı smart casual...</string>
+    <string name="generate_output">Kombin Oluştur</string>
+
+    <!-- OOTD -->
+    <string name="ootd_title">Günlük Kombin</string>
+    <string name="generate_ootd">Kombin Oluştur</string>
+    <string name="stylists_pick">Stilist Seçimi</string>
+    <string name="weekend_minimalist">HAFTA SONU MİNİMALİST</string>
+    <string name="expert_reasoning">UZMAN YORUMU</string>
+    <string name="analyzing_dna">DNA Analiz Ediliyor...</string>
+    <string name="environment">ORTAM</string>
+    <string name="weather">22 Derece</string>
+    <string name="events">0 ETKİNLİK</string>
+    <string name="regenerate_look">KOMBİNİ YENİLE</string>
+
+    <!-- Profile -->
+    <string name="style_analytics">STİL ANALİTİĞİ</string>
+    <string name="wardrobe_dna_insights">GARDIROP DNA ANALİZİ</string>
+    <string name="gender_preference">CİNSİYET TERCİHİ</string>
+    <string name="female">Kadın</string>
+    <string name="male">Erkek</string>
+    <string name="non_binary">Non-binary</string>
+    <string name="category_distribution">KATEGORİ DAĞILIMI</string>
+    <string name="style_dna">STİL DNA</string>
+    <string name="aesthetic">ESTETİK</string>
+    <string name="minimalist_classic">MİNİMALİST / KLASİK</string>
+    <string name="styling_context">STİL BAĞLAMI</string>
+    <string name="corporate_office">KURUMSAL / OFİS</string>
+
 </resources>
