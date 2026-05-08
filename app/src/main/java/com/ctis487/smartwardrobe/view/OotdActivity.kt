@@ -90,11 +90,11 @@ class OotdActivity : AppCompatActivity() {
     }
 
     private fun fetchWeather(lat: Double, lon: Double) {
-        com.ctis487.smartwardrobe.network.WeatherRetrofitClient.instance.getCurrentWeather(lat, lon)
-            .enqueue(object : retrofit2.Callback<com.ctis487.smartwardrobe.network.WeatherResponse> {
+        RetrofitClient.instance.getWeather(lat, lon)
+            .enqueue(object : retrofit2.Callback<WeatherResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<com.ctis487.smartwardrobe.network.WeatherResponse>,
-                    response: retrofit2.Response<com.ctis487.smartwardrobe.network.WeatherResponse>
+                    call: retrofit2.Call<WeatherResponse>,
+                    response: retrofit2.Response<WeatherResponse>
                 ) {
                     if (response.isSuccessful) {
                         val temp = response.body()?.currentWeather?.temperature
@@ -178,7 +178,7 @@ class OotdActivity : AppCompatActivity() {
                             val icon = if (code in 0..2) "☀️" else "☁️"
 
                             weatherCtx = WeatherContext(
-                                temp = temp,
+                                temp = temp?.toInt(),
                                 conditionText = "Clear", // simplified
                                 city = city,
                                 icon = icon
