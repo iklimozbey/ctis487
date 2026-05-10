@@ -37,22 +37,23 @@ data class OutfitItem(
     val subcategory: String?,
     val primaryColor: String?,
     val role: String?,
+    val wornCount: Int?,
     val visualSimilarity: Double?,
     val logicScore: Double?
 )
 
 // ── Weather & Geo ───────────────────────────────────────────
 data class WeatherResponse(
-    val currentWeather: WeatherInfo?
-)
-
-data class WeatherInfo(
-    val temperature: Double?,
-    val is_day: Int?
+    val success: Boolean,
+    val city: String?,
+    val temp: Int?,
+    val conditionText: String?,
+    val icon: String?,
+    val lat: Double?,
+    val lon: Double?
 )
 
 data class GeoResponse(
-    val city: String?,
-    val locality: String?,
-    val principalSubdivision: String?
+    val success: Boolean,
+    val city: String?
 )

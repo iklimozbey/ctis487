@@ -20,7 +20,8 @@ class WardrobeAdapter(
     private val onDeleteClick: (ClothingItem) -> Unit,
     private val onLaundryClick: (ClothingItem) -> Unit,
     private val onWornClick: (ClothingItem) -> Unit,
-    private val onItemClick: (ClothingItem) -> Unit
+    private val onItemClick: (ClothingItem) -> Unit,
+    private val isAiView: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -102,6 +103,9 @@ class WardrobeAdapter(
                     e.printStackTrace()
                 }
             }
+
+            holder.binding.btnDelete.visibility = if (isAiView) android.view.View.GONE else android.view.View.VISIBLE
+            holder.binding.btnLaundry.visibility = if (isAiView) android.view.View.GONE else android.view.View.VISIBLE
 
             holder.binding.btnDelete.setOnClickListener {
                 onDeleteClick(item)

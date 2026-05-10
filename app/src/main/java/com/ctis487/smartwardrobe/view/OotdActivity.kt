@@ -8,8 +8,10 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,7 +21,10 @@ import com.bumptech.glide.Glide
 import com.ctis487.smartwardrobe.R
 import com.ctis487.smartwardrobe.databinding.ActivityOotdBinding
 import com.ctis487.smartwardrobe.network.*
+import com.ctis487.smartwardrobe.utils.SoundHelper
 import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +32,13 @@ class OotdActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOotdBinding
     private val BASE_URL = "http://10.0.2.2:3001"
+
+    companion object {
+        private const val REQ_LOCATION = 101
+        private var cachedOutfit: OutfitResult? = null
+        private var cachedWeather: WeatherResponse? = null
+        private var lastGeneratedDate: String? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +48,19 @@ class OotdActivity : AppCompatActivity() {
         setupBottomNavigation()
 
         binding.btnGenerateOotd.setOnClickListener {
-            startOotdFlow()
+            startOotdFlow(forceRegenerate = true)
         }
 
-        startOotdFlow()
+        binding.btnVisualize.setOnClickListener {
+            visualizeCurrentOutfit()
+        }
+
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        if (cachedOutfit != null && lastGeneratedDate == today) {
+            renderOotd(cachedOutfit!!, cachedWeather)
+        } else {
+            startOotdFlow(forceRegenerate = false)
+        }
     }
 
     override fun onResume() {
@@ -47,7 +68,6 @@ class OotdActivity : AppCompatActivity() {
         binding.bottomNavigation.selectedItemId = R.id.nav_ootd
     }
 
-    // ── Navigation ──────────────────────────────────────────────
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -73,9 +93,8 @@ class OotdActivity : AppCompatActivity() {
         }
     }
 
-    // ── OOTD Entry ──────────────────────────────────────────────
-    private fun startOotdFlow() {
-        showLoading("Locating you...")
+    private fun startOotdFlow(forceRegenerate: Boolean) {
+        showLoading("Curating your look...")
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
@@ -89,113 +108,68 @@ class OotdActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchWeather(lat: Double, lon: Double) {
-        RetrofitClient.instance.getWeather(lat, lon)
-            .enqueue(object : retrofit2.Callback<WeatherResponse> {
-                override fun onResponse(
-                    call: retrofit2.Call<WeatherResponse>,
-                    response: retrofit2.Response<WeatherResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val temp = response.body()?.currentWeather?.temperature
-                        val isDay = response.body()?.currentWeather?.is_day
-                        val icon = if (isDay == 1) "☀️" else "🌙"
-                        if (temp != null) {
-                            binding.tvWeather.text = "$icon $temp°C"
-                        }
-                    } else {
-                        binding.tvWeather.text = "⚠️ API Error"
-                    }
-                }
-
-                override fun onFailure(call: retrofit2.Call<com.ctis487.smartwardrobe.network.WeatherResponse>, t: Throwable) {
-                    binding.tvWeather.text = "⚠️ Net Error"
-                }
-            })
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQ_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            fetchLocationAndGenerateOotd()
-        } else {
-            // Proceed without GPS — backend will use defaults (Ankara-ish)
-            generateOotdWithCoords(null, null, "Your Area")
-        }
-    }
-
     @SuppressLint("MissingPermission")
     private fun fetchLocationAndGenerateOotd() {
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                val location: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                    ?: locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-                if (location != null) {
-                    val lat = location.latitude
-                    val lon = location.longitude
-                    withContext(Dispatchers.Main) { showLoading("Checking weather...") }
-
-                    // Reverse geocode via external API
-                    var city = "Your Area"
-                    try {
-                        val geoRes = ExternalRetrofit.geo.reverseGeocode(lat, lon).execute()
-                        if (geoRes.isSuccessful) {
-                            val data = geoRes.body()
-                            city = data?.city ?: data?.locality ?: data?.principalSubdivision ?: "Your Area"
-                        }
-                    } catch (e: Exception) { e.printStackTrace() }
-
-                    generateOotdWithCoords(lat, lon, city)
-                } else {
-                    generateOotdWithCoords(null, null, "Your Area")
-                }
-            } catch (e: Exception) {
-                generateOotdWithCoords(null, null, "Your Area")
+            // 1. Try to get location with a hard timeout of 1.5 seconds
+            val location: Location? = withTimeoutOrNull(1500) {
+                try {
+                    val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                        ?: lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                } catch (e: Exception) { null }
             }
+
+            // 2. Process whatever we have (even if null)
+            processLocation(location)
         }
     }
 
-    // ── Core OOTD Generation ─────────────────────────────────────
-    private fun generateOotdWithCoords(lat: Double?, lon: Double?, city: String) {
+    private suspend fun processLocation(location: Location?) {
+        // Fallback to default (Ankara) if location is null
+        val lat = location?.latitude ?: 39.9334 
+        val lon = location?.longitude ?: 32.8597
+        
+        Log.d("OOTD", "Proceeding with location: $lat, $lon")
+        
+        try {
+            // Call backend for weather - this will also return the City name
+            val weatherRes = RetrofitClient.instance.getWeather(lat, lon).execute()
+            if (weatherRes.isSuccessful && weatherRes.body()?.success == true) {
+                val w = weatherRes.body()!!
+                cachedWeather = w
+                generateOotdWithWeather(w)
+            } else {
+                Log.e("OOTD", "Weather API failed or returned success=false")
+                generateOotdWithWeather(null, lat, lon)
+            }
+        } catch (e: Exception) {
+            Log.e("OOTD", "Weather call error: ${e.message}")
+            generateOotdWithWeather(null, lat, lon)
+        }
+    }
+
+    private fun generateOotdWithWeather(w: WeatherResponse?, lat: Double? = null, lon: Double? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-                // 1. Fetch hourly weather
-                withContext(Dispatchers.Main) { showLoading("Checking weather in $city...") }
-                var weatherCtx: WeatherContext? = null
-                var weatherDisplayText = "Unknown"
-
-                if (lat != null && lon != null) {
-                    try {
-                        val wRes = ExternalRetrofit.weather.getForecast(lat = lat, lon = lon).execute()
-                        if (wRes.isSuccessful) {
-                            val w = wRes.body()?.current_weather
-                            val temp = w?.temperature
-                            val code = w?.weathercode ?: 0
-                            val icon = if (code in 0..2) "☀️" else "☁️"
-
-                            weatherCtx = WeatherContext(
-                                temp = temp?.toInt(),
-                                conditionText = "Clear", // simplified
-                                city = city,
-                                icon = icon
-                            )
-                            weatherDisplayText = "$icon ${temp}°C"
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                val city = w?.city ?: "Current Location"
+                
+                withContext(Dispatchers.Main) { 
+                    binding.tvWeather.text = if (w != null) "${w.icon} ${w.temp}°C" else "🌡️ --°C"
+                    binding.tvEvents.text = "📍 $city"
+                    showLoading("AI is styling your look for $city...") 
                 }
 
-                // 2. Build OOTD query (mirrors the frontend's exact prompt)
-                withContext(Dispatchers.Main) { showLoading("AI is styling your look...") }
-                val dateStr = today
-                val query = "curate a perfect outfit for today ($dateStr) in $city based on weather."
+                val weatherCtx = if (w != null) WeatherContext(
+                    temp = w.temp,
+                    conditionText = w.conditionText,
+                    city = w.city,
+                    icon = w.icon
+                ) else null
 
-                // 3. Call /api/search with weather context
+                val query = "curate a perfect outfit for today ($today) in $city based on weather."
+
                 val searchRes = RetrofitClient.instance.searchOutfit(
                     OutfitSearchRequest(
                         query = query,
@@ -208,7 +182,9 @@ class OotdActivity : AppCompatActivity() {
                     if (searchRes.isSuccessful && searchRes.body()?.success == true) {
                         val outfit = searchRes.body()?.outfit
                         if (outfit != null) {
-                            renderOotd(outfit, weatherDisplayText, city)
+                            cachedOutfit = outfit
+                            lastGeneratedDate = today
+                            renderOotd(outfit, w)
                         } else {
                             showError("No outfit found. Add more clothes to your closet!")
                         }
@@ -224,28 +200,34 @@ class OotdActivity : AppCompatActivity() {
         }
     }
 
-    // ── Rendering ────────────────────────────────────────────────
-    private fun renderOotd(outfit: OutfitResult, weatherText: String, city: String) {
-        // Update weather / badge pills
-        binding.tvWeather.text = weatherText
-        binding.tvEvents.text = "📍 $city"
+    private fun renderOotd(outfit: OutfitResult, weather: WeatherResponse?) {
         binding.tvOotdBadge.text = "Stylist's Pick"
-
-        // Outfit name & reasoning
         val name = outfit.outfitName ?: outfit.name ?: "Your Daily Ensemble"
         binding.tvOotdTitle.text = name
         binding.tvReasoning.text = outfit.reasoning ?: "Curated just for you."
 
-        // Populate item thumbnails
+        if (weather != null) {
+            binding.tvWeather.text = "${weather.icon} ${weather.temp}°C"
+            binding.tvEvents.text = "📍 ${weather.city}"
+        }
+
         binding.layoutItems.removeAllViews()
         outfit.items?.forEach { item ->
             val view = LayoutInflater.from(this).inflate(R.layout.item_ootd_piece, binding.layoutItems, false)
             val img = view.findViewById<ImageView>(R.id.imgItem)
             val tvRole = view.findViewById<TextView>(R.id.tvItemRole)
             val tvName = view.findViewById<TextView>(R.id.tvItemName)
+            val tvWorn = view.findViewById<TextView>(R.id.tvWornCount)
+            val btnWorn = view.findViewById<ImageButton>(R.id.btnWorn)
 
             tvRole.text = (item.role ?: item.subcategory ?: "").uppercase()
             tvName.text = item.subcategory ?: ""
+            tvWorn.text = "${item.wornCount ?: 0}w"
+            btnWorn.setImageResource(R.drawable.ic_closet)
+
+            btnWorn.setOnClickListener {
+                markAsWorn(item.id ?: return@setOnClickListener, tvWorn)
+            }
 
             if (!item.imageUrl.isNullOrEmpty()) {
                 Glide.with(this)
@@ -257,10 +239,78 @@ class OotdActivity : AppCompatActivity() {
             binding.layoutItems.addView(view)
         }
 
-        // Show content, hide loading
+        binding.btnVisualize.visibility = View.VISIBLE
         binding.layoutLoading.visibility = View.GONE
         binding.layoutContent.visibility = View.VISIBLE
         binding.tvError.visibility = View.GONE
+    }
+
+    private fun visualizeCurrentOutfit() {
+        val outfit = cachedOutfit ?: return
+        val itemIds = outfit.items?.mapNotNull { it.id } ?: return
+        if (itemIds.isEmpty()) return
+
+        showLoading("Creating visualization...")
+        
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val req = mapOf("itemIds" to itemIds, "stylingMode" to "unisex")
+                val response = RetrofitClient.instance.visualizeOutfit(req).execute()
+                
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val body = response.body()?.string() ?: ""
+                        val json = org.json.JSONObject(body)
+                        val imageUrl = json.getString("imageUrl")
+                        showVisualizationResult("$BASE_URL$imageUrl")
+                    } else {
+                        Toast.makeText(this@OotdActivity, "Visualization failed", Toast.LENGTH_SHORT).show()
+                    }
+                    hideLoading()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@OotdActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    hideLoading()
+                }
+            }
+        }
+    }
+
+    private fun showVisualizationResult(url: String) {
+        val dialog = android.app.AlertDialog.Builder(this)
+            .setTitle("Outfit Visualization")
+            .setPositiveButton("Awesome", null)
+            .create()
+            
+        val view = layoutInflater.inflate(R.layout.dialog_visualization, null)
+        val img = view.findViewById<ImageView>(R.id.imgVisualization)
+        
+        Glide.with(this).load(url).into(img)
+        dialog.setView(view)
+        dialog.show()
+    }
+
+    private fun markAsWorn(itemId: String, tvWorn: TextView) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val emptyBody = "{}".toRequestBody("application/json".toMediaTypeOrNull())
+                val response = RetrofitClient.instance.markItemWorn(itemId, emptyBody).execute()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val body = response.body()?.string() ?: ""
+                        val json = org.json.JSONObject(body)
+                        val newCount = json.optInt("wornCount", 0)
+                        tvWorn.text = "${newCount}w"
+                        
+                        SoundHelper.playSuccessSound(this@OotdActivity)
+                        Toast.makeText(this@OotdActivity, "Marked as worn!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("OotdActivity", "Worn error", e)
+            }
+        }
     }
 
     private fun showLoading(message: String = "Curating your look...") {
@@ -268,6 +318,13 @@ class OotdActivity : AppCompatActivity() {
         binding.tvLoadingMsg.text = message
         binding.layoutContent.visibility = View.GONE
         binding.tvError.visibility = View.GONE
+        binding.btnVisualize.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutContent.visibility = View.VISIBLE
+        binding.btnVisualize.visibility = View.VISIBLE
     }
 
     private fun showError(message: String) {
@@ -276,9 +333,5 @@ class OotdActivity : AppCompatActivity() {
         binding.tvError.text = message
         binding.tvError.visibility = View.VISIBLE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        private const val REQ_LOCATION = 101
     }
 }

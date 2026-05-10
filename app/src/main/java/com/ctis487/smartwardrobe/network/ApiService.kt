@@ -39,6 +39,9 @@ interface ApiService {
     @POST("api/search")
     fun searchOutfit(@Body request: OutfitSearchRequest): Call<OutfitSearchResponse>
 
+    @POST("api/recommend/visualize")
+    fun visualizeOutfit(@Body request: Map<String, @JvmSuppressWildcards Any>): Call<ResponseBody>
+
     // Weather
     @GET("api/weather")
     fun getWeather(

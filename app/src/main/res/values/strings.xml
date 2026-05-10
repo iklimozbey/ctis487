@@ -12,7 +12,7 @@
     <!-- Bottom Navigation -->
     <string name="tab_closet">Closet</string>
     <string name="tab_laundry">Laundry</string>
-    <string name="tab_ootd">AI Stylist</string>
+    <string name="tab_ootd">OOTD</string>
     <string name="tab_profile">Profile</string>
     <string name="tab_outfit_ai">Outfit AI</string>
 
