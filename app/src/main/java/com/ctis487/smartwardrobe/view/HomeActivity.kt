@@ -206,22 +206,11 @@ class HomeActivity : AppCompatActivity() {
 
                 val response = RetrofitClient.instance.uploadImage(imagePart, optionsPart).execute()
                 if (response.isSuccessful) {
-                    val result = response.body()?.string() ?: ""
-                    val json = org.json.JSONObject(result)
-                    val itemObj = json.getJSONObject("item")
-
-                    val newItem = ClothingItem(
-                        id = itemObj.getString("id"),
-                        imageUrl = "http://10.0.2.2:3001" + itemObj.getString("imageUrl"),
-                        subcategory = itemObj.optString("subcategory", "Unknown"),
-                        color = itemObj.optString("primaryColor", "Unknown"),
-                        status = "closet"
-                    )
-
-                    db.clothingDao().insertItem(newItem)
+                    // Trigger a full sync to get the new item with all AI metadata
+                    com.ctis487.smartwardrobe.network.SyncManager.syncFromBackend(this@HomeActivity)
 
                     withContext(Dispatchers.Main) {
-                        SoundHelper.playSuccessSound(this@HomeActivity) // ✅ SOUND (4 pts)
+                        SoundHelper.playSuccessSound(this@HomeActivity)
                         Toast.makeText(this@HomeActivity, R.string.success, Toast.LENGTH_SHORT).show()
                         loadItems()
                     }

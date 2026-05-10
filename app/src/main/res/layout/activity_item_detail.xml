@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -12,20 +13,38 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/item_detail"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                app:tint="@color/white"
+                android:padding="12dp"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_detail"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/border_color"
@@ -34,7 +53,7 @@
             <ImageView
                 android:id="@+id/imgDetail"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="400dp"
                 android:scaleType="centerCrop"
                 android:background="@color/black" />
         </com.google.android.material.card.MaterialCardView>
@@ -43,71 +62,81 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="24dp"
-            android:padding="12dp">
+            android:layout_marginTop="24dp">
 
             <TextView
+                android:id="@+id/tvCategoryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/identification"
+                tools:text="DRESS"
                 android:textColor="@color/accent"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.1"/>
+                android:letterSpacing="0.1"
+                android:textAllCaps="true"/>
 
-            <EditText
-                android:id="@+id/etCategory"
+            <TextView
+                android:id="@+id/tvSubcategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/category"
+                tools:text="Strapless Gown"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:textAllCaps="true"
-                android:textColorHint="@color/text_muted"
-                android:background="@null"
-                android:layout_marginTop="4dp"
-                android:paddingVertical="8dp"/>
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="A striking strapless ball gown featuring a black background with a vibrant fuchsia floral jacquard pattern."
+                android:textColor="@color/warm_gray"
+                android:textSize="14sp"
+                android:lineSpacingMultiplier="1.2"
+                android:layout_marginTop="12dp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/border_color"
-                android:layout_marginVertical="16dp"/>
+                android:layout_marginVertical="20dp"/>
+
+            <!-- Attributes Grid-like rows -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/row_attribute" android:id="@+id/rowColor"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowTone"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowStyle"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowPattern"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowMaterial"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowFit"/>
+                <include layout="@layout/row_attribute" android:id="@+id/rowSeason"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/color_metadata"
+                android:text="@string/occasions"
                 android:textColor="@color/accent"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.1"/>
+                android:letterSpacing="0.1"
+                android:layout_marginTop="24dp"
+                android:textAllCaps="true"/>
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupOccasions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-
-                <com.ctis487.smartwardrobe.customview.CircularColorView
-                    android:id="@+id/colorCircle"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="12dp"/>
-
-                <EditText
-                    android:id="@+id/etColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/color_hint"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textColorHint="@color/text_muted"
-                    android:background="@null"
-                    android:paddingVertical="8dp"/>
-            </LinearLayout>
+                android:layout_marginTop="12dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="4dp">
+                <!-- Chips added dynamically -->
+            </com.google.android.material.chip.ChipGroup>
 
         </LinearLayout>
 
@@ -116,7 +145,8 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="@string/save_changes"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/accent"
             android:textColor="@color/black"
             android:textStyle="bold"

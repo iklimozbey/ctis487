@@ -13,6 +13,9 @@ interface ClothingDao {
     @Query("SELECT * FROM clothing_items WHERE status = 'closet'")
     suspend fun getClosetItems(): List<ClothingItem>
 
+    @Query("SELECT * FROM clothing_items WHERE id = :itemId")
+    suspend fun getItemById(itemId: String): ClothingItem?
+
     @Query("SELECT * FROM clothing_items")
     suspend fun getAllItems(): List<ClothingItem>
 

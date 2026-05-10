@@ -44,6 +44,15 @@
     <string name="color_hint">Color Hex/Name</string>
     <string name="save">Save Changes</string>
     <string name="save_changes">SAVE CHANGES</string>
+    <string name="tone">Tone</string>
+    <string name="style">Style</string>
+    <string name="pattern">Pattern</string>
+    <string name="material">Material</string>
+    <string name="fit">Fit</string>
+    <string name="season">Season</string>
+    <string name="occasions">Occasions</string>
+    <string name="metadata">METADATA</string>
+    <string name="description">DESCRIPTION</string>
 
     <!-- Laundry -->
     <string name="laundry_basket">LAUNDRY BASKET</string>

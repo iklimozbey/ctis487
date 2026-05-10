@@ -81,6 +81,7 @@ class OutfitAiActivity : AppCompatActivity() {
                             ClothingItem(
                                 id = item.id ?: "",
                                 imageUrl = item.imageUrl ?: "",
+                                category = null,
                                 subcategory = item.subcategory,
                                 color = item.primaryColor,
                                 status = "closet"

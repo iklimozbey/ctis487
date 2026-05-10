@@ -7,9 +7,10 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [ClothingItem::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
+@androidx.room.TypeConverters(TypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun clothingDao(): ClothingDao
 
