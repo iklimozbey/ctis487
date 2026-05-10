@@ -24,3 +24,44 @@ data class UserProfile(
     var stylePref: String? = "minimalist",
     var bio: String? = null
 )
+
+data class AnalyticsResponse(
+    val success: Boolean,
+    val analytics: AnalyticsData
+)
+
+data class AnalyticsData(
+    val stats: BasicStats,
+    val colors: ColorStats,
+    val categories: CategoryStats,
+    val dormant: List<DormantItem>,
+    val topWorn: List<TopWornItem>
+)
+
+data class BasicStats(
+    val totalItems: Int,
+    val totalWears: Int
+)
+
+data class ColorStats(
+    val owned: Map<String, Int>,
+    val worn: Map<String, Int>
+)
+
+data class CategoryStats(
+    val owned: Map<String, Int>,
+    val worn: Map<String, Int>
+)
+
+data class DormantItem(
+    val id: String,
+    val name: String,
+    val reason: String
+)
+
+data class TopWornItem(
+    val id: String,
+    val name: String,
+    val count: Int,
+    val image: String?
+)

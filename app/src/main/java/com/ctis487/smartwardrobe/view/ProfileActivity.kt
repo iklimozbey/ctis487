@@ -33,6 +33,10 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnSaveProfile.setOnClickListener {
             saveProfile()
         }
+
+        binding.btnAnalytics.setOnClickListener {
+            startActivity(Intent(this, AnalyticsActivity::class.java))
+        }
     }
 
     private fun setupSpinners() {

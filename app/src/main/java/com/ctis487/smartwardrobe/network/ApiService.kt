@@ -56,6 +56,9 @@ interface ApiService {
     @POST("api/profile")
     fun saveProfile(@Body profile: UserProfile): Call<ProfileResponse>
 
+    @GET("api/analytics")
+    fun getAnalytics(): Call<AnalyticsResponse>
+
     @GET("api/health")
     fun getHealth(): Call<ResponseBody>
 }
