@@ -45,6 +45,7 @@
     <string name="move_to_laundry">Wash</string>
     <string name="move_to_closet">Cleaned</string>
     <string name="wash">WASH</string>
+    <string name="wash_all">WASH ALL</string>
 
     <!-- Detail -->
     <string name="item_detail">ITEM DETAIL</string>

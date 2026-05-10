@@ -45,6 +45,7 @@
     <string name="move_to_laundry">Yıka</string>
     <string name="move_to_closet">Temizlendi</string>
     <string name="wash">YIKA</string>
+    <string name="wash_all">TÜMÜNÜ YIKA</string>
 
     <!-- Detail -->
     <string name="item_detail">ÜRÜN DETAYI</string>

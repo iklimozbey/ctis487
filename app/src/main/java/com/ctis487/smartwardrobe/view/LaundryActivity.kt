@@ -176,17 +176,17 @@ class LaundryActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         com.ctis487.smartwardrobe.utils.SoundHelper.playSuccessSound(this@LaundryActivity)
-                        android.widget.Toast.makeText(this@LaundryActivity, "All items washed!", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(this@LaundryActivity, R.string.success, android.widget.Toast.LENGTH_SHORT).show()
                         loadItems()
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        android.widget.Toast.makeText(this@LaundryActivity, "Backend error", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(this@LaundryActivity, R.string.error, android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    android.widget.Toast.makeText(this@LaundryActivity, "Network Error", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(this@LaundryActivity, R.string.error, android.widget.Toast.LENGTH_SHORT).show()
                 }
             }
         }
