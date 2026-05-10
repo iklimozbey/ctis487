@@ -268,8 +268,7 @@ class OotdActivity : AppCompatActivity() {
     private fun markAsWorn(itemId: String, tvWorn: TextView) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val emptyBody = "{}".toRequestBody("application/json".toMediaTypeOrNull())
-                val response = RetrofitClient.instance.markItemWorn(itemId, emptyBody).execute()
+                val response = RetrofitClient.instance.markItemWorn(itemId, emptyMap()).execute()
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val body = response.body()?.string() ?: ""

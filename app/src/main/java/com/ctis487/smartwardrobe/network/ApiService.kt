@@ -30,7 +30,7 @@ interface ApiService {
     @POST("api/items/{id}/worn")
     fun markItemWorn(
         @Path("id") id: String,
-        @Body body: RequestBody
+        @Body body: Map<String, String>
     ): Call<ResponseBody>
 
     @POST("api/items/wash-all")

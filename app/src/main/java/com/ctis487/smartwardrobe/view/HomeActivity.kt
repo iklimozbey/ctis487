@@ -281,9 +281,7 @@ class HomeActivity : AppCompatActivity() {
     private fun markAsWorn(item: ClothingItem) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Ensure we send a body for POST
-                val emptyBody = "{}".toRequestBody("application/json".toMediaTypeOrNull())
-                val response = RetrofitClient.instance.markItemWorn(item.id, emptyBody).execute()
+                val response = RetrofitClient.instance.markItemWorn(item.id, emptyMap()).execute()
                 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
