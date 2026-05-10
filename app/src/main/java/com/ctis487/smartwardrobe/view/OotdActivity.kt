@@ -1,12 +1,6 @@
 package com.ctis487.smartwardrobe.view
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.ctis487.smartwardrobe.R
 import com.ctis487.smartwardrobe.databinding.ActivityOotdBinding
@@ -25,6 +18,7 @@ import com.ctis487.smartwardrobe.utils.SoundHelper
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,7 +28,6 @@ class OotdActivity : AppCompatActivity() {
     private val BASE_URL = "http://10.0.2.2:3001"
 
     companion object {
-        private const val REQ_LOCATION = 101
         private var cachedOutfit: OutfitResult? = null
         private var cachedWeather: WeatherResponse? = null
         private var lastGeneratedDate: String? = null
@@ -48,7 +41,7 @@ class OotdActivity : AppCompatActivity() {
         setupBottomNavigation()
 
         binding.btnGenerateOotd.setOnClickListener {
-            startOotdFlow(forceRegenerate = true)
+            startOotdFlow()
         }
 
         binding.btnVisualize.setOnClickListener {
@@ -59,7 +52,7 @@ class OotdActivity : AppCompatActivity() {
         if (cachedOutfit != null && lastGeneratedDate == today) {
             renderOotd(cachedOutfit!!, cachedWeather)
         } else {
-            startOotdFlow(forceRegenerate = false)
+            startOotdFlow()
         }
     }
 
@@ -93,67 +86,55 @@ class OotdActivity : AppCompatActivity() {
         }
     }
 
-    private fun startOotdFlow(forceRegenerate: Boolean) {
-        showLoading("Curating your look...")
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                REQ_LOCATION
-            )
-        } else {
-            fetchLocationAndGenerateOotd()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun fetchLocationAndGenerateOotd() {
+    private fun startOotdFlow() {
+        showLoading("Syncing with backend profile...")
         CoroutineScope(Dispatchers.IO).launch {
-            // 1. Try to get location with a hard timeout of 1.5 seconds
-            val location: Location? = withTimeoutOrNull(1500) {
-                try {
-                    val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                    lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                        ?: lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                } catch (e: Exception) { null }
-            }
+            try {
+                // 1. Fetch the user's profile from the backend
+                val profileRes = RetrofitClient.instance.getProfile().execute()
+                var lat: Double? = null
+                var lon: Double? = null
+                var city: String? = null
 
-            // 2. Process whatever we have (even if null)
-            processLocation(location)
+                if (profileRes.isSuccessful) {
+                    val profile = profileRes.body()?.profile
+                    lat = profile?.lat
+                    lon = profile?.lon
+                    city = profile?.location
+                }
+
+                // 2. If profile is missing coordinates, use Ankara as a sensible default for the user
+                if (lat == null || lon == null) {
+                    lat = 39.9334 
+                    lon = 32.8597
+                    if (city.isNullOrBlank()) city = "Ankara"
+                }
+
+                Log.d("OOTD", "Using Profile Location: $city ($lat, $lon)")
+
+                // 3. Call backend for weather with these specific coordinates
+                val weatherRes = RetrofitClient.instance.getWeather(lat, lon, city).execute()
+                
+                if (weatherRes.isSuccessful && weatherRes.body()?.success == true) {
+                    val w = weatherRes.body()!!
+                    cachedWeather = w
+                    generateOotdWithWeather(w)
+                } else {
+                    Log.e("OOTD", "Weather API failed")
+                    generateOotdWithWeather(null, lat, lon)
+                }
+            } catch (e: Exception) {
+                Log.e("OOTD", "Network error", e)
+                generateOotdWithWeather(null)
+            }
         }
     }
 
-    private suspend fun processLocation(location: Location?) {
-        // Fallback to default (Ankara) if location is null
-        val lat = location?.latitude ?: 39.9334 
-        val lon = location?.longitude ?: 32.8597
-        
-        Log.d("OOTD", "Proceeding with location: $lat, $lon")
-        
-        try {
-            // Call backend for weather - this will also return the City name
-            val weatherRes = RetrofitClient.instance.getWeather(lat, lon).execute()
-            if (weatherRes.isSuccessful && weatherRes.body()?.success == true) {
-                val w = weatherRes.body()!!
-                cachedWeather = w
-                generateOotdWithWeather(w)
-            } else {
-                Log.e("OOTD", "Weather API failed or returned success=false")
-                generateOotdWithWeather(null, lat, lon)
-            }
-        } catch (e: Exception) {
-            Log.e("OOTD", "Weather call error: ${e.message}")
-            generateOotdWithWeather(null, lat, lon)
-        }
-    }
-
-    private fun generateOotdWithWeather(w: WeatherResponse?, lat: Double? = null, lon: Double? = null) {
+    private fun generateOotdWithWeather(w: WeatherResponse?, fallbackLat: Double? = null, fallbackLon: Double? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                val city = w?.city ?: "Current Location"
+                val city = w?.city ?: "Ankara" // Hard fallback
                 
                 withContext(Dispatchers.Main) { 
                     binding.tvWeather.text = if (w != null) "${w.icon} ${w.temp}°C" else "🌡️ --°C"

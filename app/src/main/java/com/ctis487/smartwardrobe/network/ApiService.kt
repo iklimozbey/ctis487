@@ -45,8 +45,8 @@ interface ApiService {
     // Weather
     @GET("api/weather")
     fun getWeather(
-        @Query("lat") lat: Double,
-        @Query("lon") lon: Double,
+        @Query("lat") lat: Double? = null,
+        @Query("lon") lon: Double? = null,
         @Query("city") city: String? = null,
         @Query("date") date: String? = null,
         @Query("hourly") hourly: Boolean = false
