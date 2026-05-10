@@ -87,10 +87,9 @@ class OotdActivity : AppCompatActivity() {
     }
 
     private fun startOotdFlow() {
-        showLoading("Syncing with backend profile...")
+        showLoading(getString(R.string.fetching_env))
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 1. Fetch the user's profile from the backend
                 val profileRes = RetrofitClient.instance.getProfile().execute()
                 var lat: Double? = null
                 var lon: Double? = null
@@ -103,16 +102,12 @@ class OotdActivity : AppCompatActivity() {
                     city = profile?.location
                 }
 
-                // 2. If profile is missing coordinates, use Ankara as a sensible default for the user
                 if (lat == null || lon == null) {
                     lat = 39.9334 
                     lon = 32.8597
                     if (city.isNullOrBlank()) city = "Ankara"
                 }
 
-                Log.d("OOTD", "Using Profile Location: $city ($lat, $lon)")
-
-                // 3. Call backend for weather with these specific coordinates
                 val weatherRes = RetrofitClient.instance.getWeather(lat, lon, city).execute()
                 
                 if (weatherRes.isSuccessful && weatherRes.body()?.success == true) {
@@ -120,11 +115,9 @@ class OotdActivity : AppCompatActivity() {
                     cachedWeather = w
                     generateOotdWithWeather(w)
                 } else {
-                    Log.e("OOTD", "Weather API failed")
                     generateOotdWithWeather(null, lat, lon)
                 }
             } catch (e: Exception) {
-                Log.e("OOTD", "Network error", e)
                 generateOotdWithWeather(null)
             }
         }
@@ -134,12 +127,12 @@ class OotdActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                val city = w?.city ?: "Ankara" // Hard fallback
+                val city = w?.city ?: "Ankara" 
                 
                 withContext(Dispatchers.Main) { 
                     binding.tvWeather.text = if (w != null) "${w.icon} ${w.temp}°C" else "🌡️ --°C"
                     binding.tvEvents.text = "📍 $city"
-                    showLoading("AI is styling your look for $city...") 
+                    showLoading(getString(R.string.styling_for, city)) 
                 }
 
                 val weatherCtx = if (w != null) WeatherContext(

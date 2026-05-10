@@ -12,9 +12,16 @@
     <!-- Bottom Navigation -->
     <string name="tab_closet">Gardırop</string>
     <string name="tab_laundry">Çamaşır</string>
-    <string name="tab_ootd">AI Stilist</string>
+    <string name="tab_ootd">OOTD</string>
     <string name="tab_profile">Profil</string>
     <string name="tab_outfit_ai">Kombin AI</string>
+
+    <string name="outfit_pieces">KOMBİN PARÇALARI</string>
+    <string name="visualize">GÖRSELLEŞTİR</string>
+    <string name="worn_today">BUGÜN GİYİLDİ</string>
+    <string name="in_laundry">ÇAMAŞIRDA</string>
+    <string name="fetching_env">Ortam verileri alınıyor...</string>
+    <string name="styling_for">Yapay zeka %s için tarz oluşturuyor...</string>
 
     <!-- Home -->
     <string name="my_closet">GARDIROBUM</string>

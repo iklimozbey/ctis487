@@ -16,6 +16,13 @@
     <string name="tab_profile">Profile</string>
     <string name="tab_outfit_ai">Outfit AI</string>
 
+    <string name="outfit_pieces">OUTFIT PIECES</string>
+    <string name="visualize">VISUALIZE</string>
+    <string name="worn_today">WORN TODAY</string>
+    <string name="in_laundry">IN LAUNDRY</string>
+    <string name="fetching_env">Fetching environment...</string>
+    <string name="styling_for">AI is styling your look for %s...</string>
+
     <!-- Home -->
     <string name="my_closet">MY CLOSET</string>
     <string name="wardrobe_dna">WARDROBE DNA</string>
