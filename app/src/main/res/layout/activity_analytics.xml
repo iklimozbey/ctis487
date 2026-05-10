@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Advanced Analytics"
+                android:text="@string/adv_analytics"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Insights into your style and habits"
+                android:text="@string/analytics_desc"
                 android:textColor="@color/warm_gray"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -90,7 +90,7 @@
                     android:padding="16dp"
                     android:orientation="vertical"
                     android:layout_marginEnd="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TOTAL ITEMS" android:textColor="@color/warm_gray" android:textSize="10sp" android:textStyle="bold" android:letterSpacing="0.1"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_items" android:textColor="@color/warm_gray" android:textSize="10sp" android:textStyle="bold" android:letterSpacing="0.1"/>
                     <TextView android:id="@+id/tvTotalItems" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/white" android:textSize="24sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
@@ -101,13 +101,13 @@
                     android:background="@drawable/option_card_bg"
                     android:padding="16dp"
                     android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TOTAL WEARS" android:textColor="@color/warm_gray" android:textSize="10sp" android:textStyle="bold" android:letterSpacing="0.1"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_wears" android:textColor="@color/warm_gray" android:textSize="10sp" android:textStyle="bold" android:letterSpacing="0.1"/>
                     <TextView android:id="@+id/tvTotalWears" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/accent" android:textSize="24sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </LinearLayout>
 
             <!-- COLORS CHART -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Color Distribution (Owned)" android:textColor="@color/white" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/color_dist" android:textColor="@color/white" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chartColors"
                 android:layout_width="match_parent"
@@ -116,7 +116,7 @@
                 android:background="@drawable/option_card_bg"/>
 
             <!-- CATEGORIES CHART -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Category Usage (Worn)" android:textColor="@color/white" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/cat_usage" android:textColor="@color/white" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/chartCategories"
                 android:layout_width="match_parent"
@@ -125,11 +125,11 @@
                 android:background="@drawable/option_card_bg"/>
 
             <!-- TOP WORN ITEMS -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Top Worn Items" android:textColor="@color/accent" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/top_worn" android:textColor="@color/accent" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
             <LinearLayout android:id="@+id/layoutTopWorn" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="24dp"/>
 
             <!-- DORMANT ITEMS -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Dormant (Not worn recently)" android:textColor="@color/warm_gray" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/dormant_items" android:textColor="@color/warm_gray" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
             <LinearLayout android:id="@+id/layoutDormant" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="40dp"/>
 
         </LinearLayout>

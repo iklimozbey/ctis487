@@ -27,6 +27,8 @@
     <string name="my_closet">GARDIROBUM</string>
     <string name="wardrobe_dna">GARDIROP DNA</string>
     <string name="wardrobe_stats">Gardırop Analitiği</string>
+    <string name="empty_closet">Gardırobun boş. Hemen ürün ekle!</string>
+    <string name="no_laundry">Her şey tertemiz!</string>
 
     <!-- Categories -->
     <string name="all">Tümü</string>
@@ -34,6 +36,8 @@
     <string name="bottoms">Altlar</string>
     <string name="shoes">Ayakkabılar</string>
     <string name="outerwear">Dış Giyim</string>
+    <string name="dresses">Elbiseler</string>
+    <string name="accessories">Aksesuarlar</string>
 
     <!-- Item Actions -->
     <string name="add_item">Ürün Ekle</string>
@@ -46,17 +50,27 @@
     <string name="item_detail">ÜRÜN DETAYI</string>
     <string name="identification">TANIMLAMA</string>
     <string name="category">Kategori</string>
-    <string name="color">Renk</string>
     <string name="color_metadata">RENK METADATASI</string>
     <string name="color_hint">Renk Hex/İsim</string>
     <string name="save">Değişiklikleri Kaydet</string>
     <string name="save_changes">DEĞİŞİKLİKLERİ KAYDET</string>
+    
+    <string name="label_color">Renk</string>
+    <string name="label_tone">Ton</string>
+    <string name="label_style">Stil</string>
+    <string name="label_pattern">Desen</string>
+    <string name="label_material">Materyal</string>
+    <string name="label_fit">Kalıp</string>
+    <string name="label_season">Mevsim</string>
+    <string name="metadata">METADATA</string>
+    <string name="description">AÇIKLAMA</string>
+    <string name="occasions">Ortamlar</string>
 
     <!-- Laundry -->
     <string name="laundry_basket">ÇAMAŞIR SEPETİ</string>
     <string name="items_need_washing">YIKANMASI GEREKENLER</string>
     <string name="laundry">ÇAMAŞIR</string>
-    <string name="restore_to_closet">GARDIROBA GERİ TAŞIT</string>
+    <string name="restore_to_closet">GARDIROBA GERİ TAŞI</string>
 
     <!-- Delete Dialog -->
     <string name="delete_item_title">Ürün Silinsin mi?</string>
@@ -76,7 +90,7 @@
     <string name="expert_reasoning">UZMAN YORUMU</string>
     <string name="analyzing_dna">DNA Analiz Ediliyor...</string>
     <string name="environment">ORTAM</string>
-    <string name="weather">22 Derece</string>
+    <string name="weather">🌡️ Alınıyor...</string>
     <string name="events">0 ETKİNLİK</string>
     <string name="regenerate_look">KOMBİNİ YENİLE</string>
 
@@ -93,5 +107,80 @@
     <string name="minimalist_classic">MİNİMALİST / KLASİK</string>
     <string name="styling_context">STİL BAĞLAMI</string>
     <string name="corporate_office">KURUMSAL / OFİS</string>
+    <string name="bio">BİYOGRAFİ</string>
+    <string name="profession">MESLEK</string>
+    <string name="age_group">YAŞ GRUBU</string>
+    <string name="skin_tone">TEN RENGİ</string>
+    <string name="body_type">VÜCUT TİPİ</string>
+    <string name="physical_stats">FİZİKSEL BİLGİLER</string>
+    <string name="height">Boy (cm)</string>
+    <string name="weight">Kilo (kg)</string>
+    <string name="location_settings">KONUM VE SENKRONİZASYON</string>
+    <string name="location_hint">Şehir, Ülke</string>
+    <string name="ical_hint">iCal Takvim URL</string>
+    <string name="ootd_config">OOTD YAPILANDIRMASI</string>
+    <string name="ootd_mode">OOTD Oluşturma Modu</string>
+    <string name="preferred_time">Tercih Edilen Saat</string>
+    <string name="identity_lifestyle">👤 Kimlik ve Yaşam Tarzı</string>
+    <string name="gender_styling">Cinsiyet / Stil Bağlamı</string>
+    <string name="unisex">Unisex</string>
+    <string name="body_shape">Vücut Şekli</string>
+    <string name="skin_complexion">Ten Rengi / Cilt Yapısı</string>
+    <string name="ai_context">Yapay Zeka İçin Ek Bilgiler</string>
+    <string name="fashion_identity">Kişisel yapay zeka moda kimliğiniz</string>
+    <string name="adv_analytics">Gelişmiş Analitik</string>
+    <string name="analytics_desc">Tarzınız ve alışkanlıklarınız hakkında bilgiler</string>
+    <string name="total_items">TOPLAM ÜRÜN</string>
+    <string name="total_wears">TOPLAM GİYİM</string>
+    <string name="color_dist">Renk Dağılımı (Sahip Olunan)</string>
+    <string name="cat_usage">Kategori Kullanımı (Giyilen)</string>
+    <string name="top_worn">En Çok Giyilenler</string>
+    <string name="dormant_items">Atıl (Yakın zamanda giyilmeyenler)</string>
 
+    <string-array name="professions">
+        <item>Öğrenci</item>
+        <item>Kurumsal / Ofis</item>
+        <item>Yaratıcı / Sanat</item>
+        <item>Sağlık</item>
+        <item>Uzaktan / Teknoloji</item>
+        <item>Dış Mekan / El İşçiliği</item>
+    </string-array>
+
+    <string-array name="age_groups">
+        <item>Alfa Kuşağı (Çocuk)</item>
+        <item>Z Kuşağı (Havalı/Modern)</item>
+        <item>Y Kuşağı (Profesyonel/Aktif)</item>
+        <item>X Kuşağı (Yerleşik/Klasik)</item>
+        <item>Baby Boomer (Zarif/Zamansız)</item>
+    </string-array>
+
+    <string-array name="ootd_modes">
+        <item>Tekil Hazır Giyim</item>
+        <item>Akıllı Çoklu-Kombin (iCal Gerekli)</item>
+    </string-array>
+
+    <string-array name="skin_tones">
+        <item>Açık / Çok Beyaz</item>
+        <item>Beyaz / Porselen</item>
+        <item>Buğday / Zeytin</item>
+        <item>Bronz / Altın</item>
+        <item>Esmer / Zengin</item>
+        <item>Abanoz / Koyu</item>
+    </string-array>
+
+    <string-array name="style_aesthetics">
+        <item>Minimalist</item>
+        <item>Sokak Giyimi</item>
+        <item>Old Money / Klasik</item>
+        <item>Bohem / Sanatsal</item>
+        <item>Grunge / Sert</item>
+        <item>İş Resmi</item>
+        <item>Dark Academia</item>
+        <item>Aktif / Teknoloji Giyimi</item>
+        <item>Avangart</item>
+    </string-array>
+
+    <string name="prompt_needed">Lütfen önce bir komut girin!</string>
+    <string name="n_wears">%d giyim</string>
+    <string name="owned_colors">Sahip Olunan\nRenkler</string>
 </resources>

@@ -46,7 +46,7 @@ class OutfitAiActivity : AppCompatActivity() {
             if (query.isNotBlank()) {
                 generateOutfit(query)
             } else {
-                Toast.makeText(this, "Please enter a prompt first!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.prompt_needed), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -156,8 +156,8 @@ class OutfitAiActivity : AppCompatActivity() {
 
     private fun showVisualizationResult(url: String) {
         val dialog = android.app.AlertDialog.Builder(this)
-            .setTitle("Outfit Visualization")
-            .setPositiveButton("Awesome", null)
+            .setTitle(R.string.visualize)
+            .setPositiveButton(R.string.success, null)
             .create()
             
         val view = layoutInflater.inflate(R.layout.dialog_visualization, null)
@@ -176,7 +176,7 @@ class OutfitAiActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         SoundHelper.playSuccessSound(this@OutfitAiActivity)
-                        Toast.makeText(this@OutfitAiActivity, "Marked as worn!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@OutfitAiActivity, R.string.success, Toast.LENGTH_SHORT).show()
                         // Refresh worn count
                         val body = response.body()?.string() ?: ""
                         val json = org.json.JSONObject(body)

@@ -183,6 +183,13 @@ class HomeActivity : AppCompatActivity() {
                 items.clear()
                 items.addAll(filteredItems)
                 adapter.notifyDataSetChanged()
+                
+                if (items.isEmpty()) {
+                    binding.tvEmpty.visibility = View.VISIBLE
+                    binding.tvEmpty.text = getString(R.string.empty_closet)
+                } else {
+                    binding.tvEmpty.visibility = View.GONE
+                }
             }
         }
     }
@@ -218,6 +225,13 @@ class HomeActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@HomeActivity, R.string.error, Toast.LENGTH_SHORT).show()
+                    if (items.isEmpty()) {
+                        binding.tvEmpty.visibility = View.VISIBLE
+                        binding.tvEmpty.text = getString(R.string.empty_closet)
+                    } else {
+                        binding.tvEmpty.visibility = View.GONE
+                    }
+                    binding.recyclerViewHome.alpha = 1.0f
                 }
             } finally {
                 withContext(Dispatchers.Main) {

@@ -54,13 +54,13 @@ class AnalyticsActivity : AppCompatActivity() {
                     binding.analyticsContent.visibility = View.VISIBLE
                     response.body()?.analytics?.let { populateUI(it) }
                 } else {
-                    Toast.makeText(this@AnalyticsActivity, "Failed to load analytics", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AnalyticsActivity, R.string.error, Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<AnalyticsResponse>, t: Throwable) {
                 binding.lottieLoading.visibility = View.GONE
-                Toast.makeText(this@AnalyticsActivity, "Network Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AnalyticsActivity, R.string.error, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -81,7 +81,7 @@ class AnalyticsActivity : AppCompatActivity() {
         data.topWorn.forEach { item ->
             val itemView = LayoutInflater.from(this).inflate(R.layout.item_analytics_row, binding.layoutTopWorn, false)
             itemView.findViewById<TextView>(R.id.tvTitle).text = item.name
-            itemView.findViewById<TextView>(R.id.tvSubtitle).text = "${item.count} wears"
+            itemView.findViewById<TextView>(R.id.tvSubtitle).text = getString(R.string.n_wears, item.count)
             val imageView = itemView.findViewById<android.widget.ImageView>(R.id.imgItem)
             
             val url = if (item.image?.startsWith("http") == true) item.image 
@@ -137,7 +137,7 @@ class AnalyticsActivity : AppCompatActivity() {
             setEntryLabelColor(Color.WHITE)
             setEntryLabelTextSize(11f)
             setHoleColor(Color.TRANSPARENT)
-            setCenterText("Owned\nColors")
+            setCenterText(getString(R.string.owned_colors))
             setCenterTextColor(Color.WHITE)
             setCenterTextSize(14f)
             animateXY(1200, 1200)

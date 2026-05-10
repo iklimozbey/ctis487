@@ -34,6 +34,10 @@
     <string name="bottoms">Bottoms</string>
     <string name="shoes">Shoes</string>
     <string name="outerwear">Outerwear</string>
+    <string name="dresses">Dresses</string>
+    <string name="accessories">Accessories</string>
+    <string name="empty_closet">Your closet is empty. Add some clothes!</string>
+    <string name="no_laundry">Everything is clean!</string>
 
     <!-- Item Actions -->
     <string name="add_item">Add Item</string>
@@ -46,20 +50,20 @@
     <string name="item_detail">ITEM DETAIL</string>
     <string name="identification">IDENTIFICATION</string>
     <string name="category">Category</string>
-    <string name="color">Color</string>
     <string name="color_metadata">COLOR METADATA</string>
     <string name="color_hint">Color Hex/Name</string>
     <string name="save">Save Changes</string>
     <string name="save_changes">SAVE CHANGES</string>
-    <string name="tone">Tone</string>
-    <string name="style">Style</string>
-    <string name="pattern">Pattern</string>
-    <string name="material">Material</string>
-    <string name="fit">Fit</string>
-    <string name="season">Season</string>
-    <string name="occasions">Occasions</string>
+    <string name="label_color">Color</string>
+    <string name="label_tone">Tone</string>
+    <string name="label_style">Style</string>
+    <string name="label_pattern">Pattern</string>
+    <string name="label_material">Material</string>
+    <string name="label_fit">Fit</string>
+    <string name="label_season">Season</string>
     <string name="metadata">METADATA</string>
     <string name="description">DESCRIPTION</string>
+    <string name="occasions">Occasions</string>
 
     <!-- Laundry -->
     <string name="laundry_basket">LAUNDRY BASKET</string>
@@ -102,6 +106,35 @@
     <string name="minimalist_classic">MINIMALIST / CLASSIC</string>
     <string name="styling_context">STYLING CONTEXT</string>
     <string name="corporate_office">CORPORATE / OFFICE</string>
+    <string name="bio">BIO</string>
+    <string name="profession">PROFESSION</string>
+    <string name="age_group">AGE GROUP</string>
+    <string name="skin_tone">SKIN TONE</string>
+    <string name="body_type">BODY TYPE</string>
+    <string name="physical_stats">PHYSICAL STATS</string>
+    <string name="height">Height (cm)</string>
+    <string name="weight">Weight (kg)</string>
+    <string name="location_settings">LOCATION &amp; SYNC</string>
+    <string name="location_hint">City, Country</string>
+    <string name="ical_hint">iCal Calendar URL</string>
+    <string name="ootd_config">OOTD CONFIGURATION</string>
+    <string name="ootd_mode">OOTD Generation Mode</string>
+    <string name="preferred_time">Preferred Generation Time</string>
+    <string name="identity_lifestyle">👤 Identity &amp; Lifestyle</string>
+    <string name="gender_styling">Gender / Styling Context</string>
+    <string name="unisex">Unisex</string>
+    <string name="body_shape">Body Shape</string>
+    <string name="skin_complexion">Skin Tone / Complexion</string>
+    <string name="ai_context">Additional Context for AI</string>
+    <string name="fashion_identity">Your personal AI fashion identity</string>
+    <string name="adv_analytics">Advanced Analytics</string>
+    <string name="analytics_desc">Insights into your style and habits</string>
+    <string name="total_items">TOTAL ITEMS</string>
+    <string name="total_wears">TOTAL WEARS</string>
+    <string name="color_dist">Color Distribution (Owned)</string>
+    <string name="cat_usage">Category Usage (Worn)</string>
+    <string name="top_worn">Top Worn Items</string>
+    <string name="dormant_items">Dormant (Not worn recently)</string>
 
     <string-array name="professions">
         <item>Student</item>
@@ -138,9 +171,58 @@
         <item>Minimalist</item>
         <item>Streetwear</item>
         <item>Old Money / Classic</item>
+        <item>Bohemian / Artistic</item>
+        <item>Grunge / Edgy</item>
+        <item>Business Formal</item>
         <item>Dark Academia</item>
         <item>Active / Techwear</item>
         <item>Avant-Garde</item>
     </string-array>
 
+    <string-array name="professions_values" translatable="false">
+        <item>Student</item>
+        <item>Corporate / Office</item>
+        <item>Creative / Arts</item>
+        <item>Healthcare</item>
+        <item>Remote / Tech</item>
+        <item>Outdoor / Manual</item>
+    </string-array>
+
+    <string-array name="age_groups_values" translatable="false">
+        <item>Gen Alpha (Kids)</item>
+        <item>Gen Z (Cool/Modern)</item>
+        <item>Millennial (Professional/Active)</item>
+        <item>Gen X (Established/Classic)</item>
+        <item>Boomer (Refined/Timeless)</item>
+    </string-array>
+
+    <string-array name="ootd_modes_values" translatable="false">
+        <item>Single Ready-to-Wear</item>
+        <item>Smart Multi-Outfit (Requires iCal)</item>
+    </string-array>
+
+    <string-array name="skin_tones_values" translatable="false">
+        <item>Fair / Very Light</item>
+        <item>Light / Porcelain</item>
+        <item>Neutral / Olive</item>
+        <item>Tan / Golden</item>
+        <item>Deep / Rich</item>
+        <item>Ebony / Dark</item>
+    </string-array>
+
+    <string-array name="style_aesthetics_values" translatable="false">
+        <item>Minimalist</item>
+        <item>Streetwear</item>
+        <item>Old Money / Classic</item>
+        <item>Bohemian / Artistic</item>
+        <item>Grunge / Edgy</item>
+        <item>Business Formal</item>
+        <item>Dark Academia</item>
+        <item>Active / Techwear</item>
+        <item>Avant-Garde</item>
+    </string-array>
+
+    <string name="prompt_needed">Please enter a prompt first!</string>
+    <string name="n_wears">%d wears</string>
+    <string name="owned_colors">Owned\nColors</string>
 </resources>

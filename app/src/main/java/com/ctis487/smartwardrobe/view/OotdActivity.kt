@@ -224,7 +224,7 @@ class OotdActivity : AppCompatActivity() {
         val itemIds = outfit.items?.mapNotNull { it.id } ?: return
         if (itemIds.isEmpty()) return
 
-        showLoading("Creating visualization...")
+        showLoading(getString(R.string.loading))
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -238,7 +238,7 @@ class OotdActivity : AppCompatActivity() {
                         val imageUrl = json.getString("imageUrl")
                         showVisualizationResult("$BASE_URL$imageUrl")
                     } else {
-                        Toast.makeText(this@OotdActivity, "Visualization failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@OotdActivity, R.string.error, Toast.LENGTH_SHORT).show()
                     }
                     hideLoading()
                 }
@@ -253,8 +253,8 @@ class OotdActivity : AppCompatActivity() {
 
     private fun showVisualizationResult(url: String) {
         val dialog = android.app.AlertDialog.Builder(this)
-            .setTitle("Outfit Visualization")
-            .setPositiveButton("Awesome", null)
+            .setTitle(R.string.visualize)
+            .setPositiveButton(R.string.success, null)
             .create()
             
         val view = layoutInflater.inflate(R.layout.dialog_visualization, null)
@@ -278,7 +278,7 @@ class OotdActivity : AppCompatActivity() {
                         tvWorn.text = "${newCount}w"
                         
                         SoundHelper.playSuccessSound(this@OotdActivity)
-                        Toast.makeText(this@OotdActivity, "Marked as worn!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@OotdActivity, R.string.success, Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
@@ -287,9 +287,10 @@ class OotdActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoading(message: String = "Curating your look...") {
+    private fun showLoading(message: String? = null) {
+        val finalMsg = message ?: getString(R.string.loading)
         binding.layoutLoading.visibility = View.VISIBLE
-        binding.tvLoadingMsg.text = message
+        binding.tvLoadingMsg.text = finalMsg
         binding.layoutContent.visibility = View.GONE
         binding.tvError.visibility = View.GONE
         binding.btnVisualize.visibility = View.GONE

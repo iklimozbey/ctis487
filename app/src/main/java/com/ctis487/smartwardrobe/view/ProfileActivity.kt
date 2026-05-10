@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ctis487.smartwardrobe.R
@@ -40,6 +41,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
+        // Labels (What the user sees)
         val professions = resources.getStringArray(R.array.professions)
         val ageGroups = resources.getStringArray(R.array.age_groups)
         val ootdModes = resources.getStringArray(R.array.ootd_modes)
@@ -54,14 +56,10 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupCardSelections() {
-        // Gender
-        val genderCards = listOf(binding.cardMan, binding.cardWoman, binding.cardUnisex)
         binding.cardMan.setOnClickListener { selectGender("man") }
         binding.cardWoman.setOnClickListener { selectGender("woman") }
         binding.cardUnisex.setOnClickListener { selectGender("unisex") }
 
-        // Body Type
-        val bodyCards = listOf(binding.cardRectangle, binding.cardPear, binding.cardInvTriangle, binding.cardHourglass, binding.cardApple)
         binding.cardRectangle.setOnClickListener { selectBodyType("rectangle") }
         binding.cardPear.setOnClickListener { selectBodyType("pear") }
         binding.cardInvTriangle.setOnClickListener { selectBodyType("inverted-triangle") }
@@ -88,8 +86,8 @@ class ProfileActivity : AppCompatActivity() {
     private fun setupTimePicker() {
         binding.etOotdTime.setOnClickListener {
             val parts = binding.etOotdTime.text.toString().split(":")
-            val hour = parts[0].toInt()
-            val minute = parts[1].toInt()
+            val hour = parts.getOrNull(0)?.toIntOrNull() ?: 21
+            val minute = parts.getOrNull(1)?.toIntOrNull() ?: 0
 
             TimePickerDialog(this, { _, h, m ->
                 binding.etOotdTime.setText(String.format("%02d:%02d", h, m))
@@ -108,7 +106,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
             override fun onFailure(call: Call<com.ctis487.smartwardrobe.network.ProfileResponse>, t: Throwable) {
-                Toast.makeText(this@ProfileActivity, "Failed to load profile", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ProfileActivity, R.string.error, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -117,12 +115,12 @@ class ProfileActivity : AppCompatActivity() {
         selectGender(profile.gender ?: "unisex")
         selectBodyType(profile.bodyType ?: "rectangle")
 
-        // Set Spinners
-        setSpinnerValue(binding.spinnerProfession, profile.profession, R.array.professions)
-        setSpinnerValue(binding.spinnerAgeGroup, profile.ageGroup, R.array.age_groups)
-        setSpinnerValue(binding.spinnerOotdMode, profile.ootdCountMode, R.array.ootd_modes)
-        setSpinnerValue(binding.spinnerSkinTone, profile.skinTone, R.array.skin_tones)
-        setSpinnerValue(binding.spinnerStylePref, profile.stylePref, R.array.style_aesthetics)
+        // Map values (English) to indices, then set spinner selection (Labels)
+        setSpinnerSelectionByValue(binding.spinnerProfession, profile.profession, R.array.professions_values)
+        setSpinnerSelectionByValue(binding.spinnerAgeGroup, profile.ageGroup, R.array.age_groups_values)
+        setSpinnerSelectionByValue(binding.spinnerOotdMode, profile.ootdCountMode, R.array.ootd_modes_values)
+        setSpinnerSelectionByValue(binding.spinnerSkinTone, profile.skinTone, R.array.skin_tones_values)
+        setSpinnerSelectionByValue(binding.spinnerStylePref, profile.stylePref, R.array.style_aesthetics_values)
 
         binding.etLocation.setText(profile.location)
         binding.etIcalUrl.setText(profile.icalUrl)
@@ -132,20 +130,26 @@ class ProfileActivity : AppCompatActivity() {
         binding.etBio.setText(profile.bio)
     }
 
-    private fun setSpinnerValue(spinner: android.widget.Spinner, value: String?, arrayRes: Int) {
-        val array = resources.getStringArray(arrayRes)
-        val index = array.indexOfFirst { it.equals(value, ignoreCase = true) }
+    private fun setSpinnerSelectionByValue(spinner: Spinner, value: String?, valuesArrayRes: Int) {
+        val values = resources.getStringArray(valuesArrayRes)
+        val index = values.indexOfFirst { it.equals(value, ignoreCase = true) }
         if (index >= 0) spinner.setSelection(index)
     }
 
+    private fun getSpinnerValueByIndex(spinner: Spinner, valuesArrayRes: Int): String {
+        val values = resources.getStringArray(valuesArrayRes)
+        val index = spinner.selectedItemPosition
+        return if (index in values.indices) values[index] else ""
+    }
+
     private fun saveProfile() {
-        // Collect data from UI
         currentProfile.apply {
-            profession = binding.spinnerProfession.selectedItem.toString()
-            ageGroup = binding.spinnerAgeGroup.selectedItem.toString()
-            ootdCountMode = binding.spinnerOotdMode.selectedItem.toString()
-            skinTone = binding.spinnerSkinTone.selectedItem.toString()
-            stylePref = binding.spinnerStylePref.selectedItem.toString()
+            // Get English keywords for backend even if UI is in Turkish
+            profession = getSpinnerValueByIndex(binding.spinnerProfession, R.array.professions_values)
+            ageGroup = getSpinnerValueByIndex(binding.spinnerAgeGroup, R.array.age_groups_values)
+            ootdCountMode = getSpinnerValueByIndex(binding.spinnerOotdMode, R.array.ootd_modes_values)
+            skinTone = getSpinnerValueByIndex(binding.spinnerSkinTone, R.array.skin_tones_values)
+            stylePref = getSpinnerValueByIndex(binding.spinnerStylePref, R.array.style_aesthetics_values)
             
             location = binding.etLocation.text.toString()
             icalUrl = binding.etIcalUrl.text.toString()
@@ -158,13 +162,13 @@ class ProfileActivity : AppCompatActivity() {
         RetrofitClient.instance.saveProfile(currentProfile).enqueue(object : Callback<com.ctis487.smartwardrobe.network.ProfileResponse> {
             override fun onResponse(call: Call<com.ctis487.smartwardrobe.network.ProfileResponse>, response: Response<com.ctis487.smartwardrobe.network.ProfileResponse>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@ProfileActivity, "Profile saved successfully!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProfileActivity, R.string.success, Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@ProfileActivity, "Save failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProfileActivity, R.string.error, Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<com.ctis487.smartwardrobe.network.ProfileResponse>, t: Throwable) {
-                Toast.makeText(this@ProfileActivity, "Network error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ProfileActivity, R.string.error, Toast.LENGTH_SHORT).show()
             }
         })
     }

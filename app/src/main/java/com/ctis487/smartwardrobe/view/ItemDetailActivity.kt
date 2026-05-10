@@ -74,15 +74,15 @@ class ItemDetailActivity : AppCompatActivity() {
 
         // Attributes
         val colorText = if (!item.secondaryColor.isNullOrEmpty()) "${item.color} / ${item.secondaryColor}" else item.color
-        setupAttributeRow(binding.rowColor.root, getString(R.string.color), colorText, true)
-        setupAttributeRow(binding.rowTone.root, getString(R.string.tone), item.colorTone)
-        setupAttributeRow(binding.rowStyle.root, getString(R.string.style), item.style)
-        setupAttributeRow(binding.rowPattern.root, getString(R.string.pattern), item.pattern)
-        setupAttributeRow(binding.rowMaterial.root, getString(R.string.material), item.material)
-        setupAttributeRow(binding.rowFit.root, getString(R.string.fit), item.fit)
+        setupAttributeRow(binding.rowColor.root, getString(R.string.label_color), colorText, true)
+        setupAttributeRow(binding.rowTone.root, getString(R.string.label_tone), item.colorTone)
+        setupAttributeRow(binding.rowStyle.root, getString(R.string.label_style), item.style)
+        setupAttributeRow(binding.rowPattern.root, getString(R.string.label_pattern), item.pattern)
+        setupAttributeRow(binding.rowMaterial.root, getString(R.string.label_material), item.material)
+        setupAttributeRow(binding.rowFit.root, getString(R.string.label_fit), item.fit)
         
         val seasons = item.season?.joinToString(", ") ?: "—"
-        setupAttributeRow(binding.rowSeason.root, getString(R.string.season), seasons)
+        setupAttributeRow(binding.rowSeason.root, getString(R.string.label_season), seasons)
 
         // Occasion Chips
         binding.chipGroupOccasions.removeAllViews()
