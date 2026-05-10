@@ -50,6 +50,12 @@ interface ApiService {
         @Query("lon") lon: Double
     ): Call<GeoResponse>
 
+    @GET("api/profile")
+    fun getProfile(): Call<ProfileResponse>
+
+    @POST("api/profile")
+    fun saveProfile(@Body profile: UserProfile): Call<ProfileResponse>
+
     @GET("api/health")
     fun getHealth(): Call<ResponseBody>
 }

@@ -87,4 +87,44 @@
     <string name="styling_context">STYLING CONTEXT</string>
     <string name="corporate_office">CORPORATE / OFFICE</string>
 
+    <string-array name="professions">
+        <item>Student</item>
+        <item>Corporate / Office</item>
+        <item>Creative / Arts</item>
+        <item>Healthcare</item>
+        <item>Remote / Tech</item>
+        <item>Outdoor / Manual</item>
+    </string-array>
+
+    <string-array name="age_groups">
+        <item>Gen Alpha (Kids)</item>
+        <item>Gen Z (Cool/Modern)</item>
+        <item>Millennial (Professional/Active)</item>
+        <item>Gen X (Established/Classic)</item>
+        <item>Boomer (Refined/Timeless)</item>
+    </string-array>
+
+    <string-array name="ootd_modes">
+        <item>Single Ready-to-Wear</item>
+        <item>Smart Multi-Outfit (Requires iCal)</item>
+    </string-array>
+
+    <string-array name="skin_tones">
+        <item>Fair / Very Light</item>
+        <item>Light / Porcelain</item>
+        <item>Neutral / Olive</item>
+        <item>Tan / Golden</item>
+        <item>Deep / Rich</item>
+        <item>Ebony / Dark</item>
+    </string-array>
+
+    <string-array name="style_aesthetics">
+        <item>Minimalist</item>
+        <item>Streetwear</item>
+        <item>Old Money / Classic</item>
+        <item>Dark Academia</item>
+        <item>Active / Techwear</item>
+        <item>Avant-Garde</item>
+    </string-array>
+
 </resources>
