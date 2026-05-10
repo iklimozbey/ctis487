@@ -19,6 +19,7 @@ class WardrobeAdapter(
     private var items: List<ClothingItem>,
     private val onDeleteClick: (ClothingItem) -> Unit,
     private val onLaundryClick: (ClothingItem) -> Unit,
+    private val onWornClick: (ClothingItem) -> Unit,
     private val onItemClick: (ClothingItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -56,6 +57,37 @@ class WardrobeAdapter(
             holder.binding.tvCategory.text = item.subcategory ?: "Unknown"
             holder.binding.tvColor.text = item.color ?: "N/A"
             holder.binding.tvTag.text = item.subcategory?.split(" ")?.last()?.uppercase() ?: "ITEM"
+            holder.binding.tvWornCount.text = "${item.wornCount} wears"
+
+            // Handle Premium Status Badges
+            val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+            val isWornToday = item.lastWorn?.startsWith(today) == true
+            
+            when {
+                isWornToday -> {
+                    holder.binding.statusBadgeContainer.visibility = android.view.View.VISIBLE
+                    holder.binding.tvStatusBadge.text = "WORN TODAY"
+                    holder.binding.tvStatusBadge.setTextColor(holder.itemView.context.getColor(com.ctis487.smartwardrobe.R.color.accent))
+                }
+                item.status == "laundry" -> {
+                    holder.binding.statusBadgeContainer.visibility = android.view.View.VISIBLE
+                    holder.binding.tvStatusBadge.text = "IN LAUNDRY"
+                    holder.binding.tvStatusBadge.setTextColor(holder.itemView.context.getColor(com.ctis487.smartwardrobe.R.color.red))
+                }
+                item.status == "winter-store" -> {
+                    holder.binding.statusBadgeContainer.visibility = android.view.View.VISIBLE
+                    holder.binding.tvStatusBadge.text = "❄️ WINTER"
+                    holder.binding.tvStatusBadge.setTextColor(holder.itemView.context.getColor(android.R.color.holo_blue_light))
+                }
+                item.status == "summer-store" -> {
+                    holder.binding.statusBadgeContainer.visibility = android.view.View.VISIBLE
+                    holder.binding.tvStatusBadge.text = "☀️ SUMMER"
+                    holder.binding.tvStatusBadge.setTextColor(holder.itemView.context.getColor(android.R.color.holo_orange_light))
+                }
+                else -> {
+                    holder.binding.statusBadgeContainer.visibility = android.view.View.GONE
+                }
+            }
 
             // ✅ Native Image loading without Glide
             CoroutineScope(Dispatchers.IO).launch {
@@ -78,6 +110,11 @@ class WardrobeAdapter(
             holder.binding.btnLaundry.setOnClickListener {
                 onLaundryClick(item)
             }
+
+            holder.binding.btnWorn.setOnClickListener {
+                onWornClick(item)
+            }
+
             holder.binding.root.setOnClickListener {
                 onItemClick(item)
             }

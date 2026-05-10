@@ -37,6 +37,10 @@ class AnalyticsActivity : AppCompatActivity() {
         binding.btnRefresh.setOnClickListener {
             fetchAnalytics()
         }
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun fetchAnalytics() {
@@ -99,20 +103,75 @@ class AnalyticsActivity : AppCompatActivity() {
     }
 
     private fun setupColorChart(owned: Map<String, Int>) {
-        val entries = owned.map { PieEntry(it.value.toFloat(), it.key) }
+        val aggregated = mutableMapOf<String, Int>()
+        val baseColors = listOf("blue", "red", "green", "yellow", "black", "white", "gray", "grey", "orange", "purple", "pink", "brown", "beige", "teal", "maroon", "silver", "gold")
+        
+        owned.forEach { (name, count) ->
+            val lowerName = name.lowercase()
+            val base = baseColors.find { lowerName.contains(it) } ?: lowerName
+            val normalizedBase = if (base == "grey") "gray" else base
+            aggregated[normalizedBase] = aggregated.getOrDefault(normalizedBase, 0) + count
+        }
+
+        val entries = aggregated.map { PieEntry(it.value.toFloat(), it.key.replaceFirstChar { it.uppercase() }) }
         val dataSet = PieDataSet(entries, "")
-        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+        
+        // Semantic Color Mapping
+        val colors = aggregated.keys.map { getColorForName(it) }
+        dataSet.colors = colors
+        
         dataSet.valueTextColor = Color.WHITE
-        dataSet.valueTextSize = 10f
+        dataSet.valueTextSize = 12f
+        dataSet.sliceSpace = 3f
+        
+        // Use darker labels for very light colors
+        dataSet.valueLineColor = Color.WHITE
+        dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
         
         val pieData = PieData(dataSet)
-        binding.chartColors.data = pieData
-        binding.chartColors.description.isEnabled = false
-        binding.chartColors.legend.textColor = Color.WHITE
-        binding.chartColors.setEntryLabelColor(Color.WHITE)
-        binding.chartColors.setHoleColor(Color.TRANSPARENT)
-        binding.chartColors.animateXY(1000, 1000)
-        binding.chartColors.invalidate()
+        binding.chartColors.apply {
+            data = pieData
+            description.isEnabled = false
+            legend.textColor = Color.WHITE
+            legend.isWordWrapEnabled = true
+            setEntryLabelColor(Color.WHITE)
+            setEntryLabelTextSize(11f)
+            setHoleColor(Color.TRANSPARENT)
+            setCenterText("Owned\nColors")
+            setCenterTextColor(Color.WHITE)
+            setCenterTextSize(14f)
+            animateXY(1200, 1200)
+            invalidate()
+        }
+    }
+
+    private fun getColorForName(name: String): Int {
+        val lowerName = name.lowercase()
+        return try {
+            when {
+                lowerName.contains("black") -> Color.BLACK
+                lowerName.contains("white") -> Color.WHITE
+                lowerName.contains("red") -> Color.RED
+                lowerName.contains("blue") -> Color.BLUE
+                lowerName.contains("navy") -> Color.parseColor("#000080")
+                lowerName.contains("green") -> Color.parseColor("#4CAF50")
+                lowerName.contains("yellow") -> Color.YELLOW
+                lowerName.contains("gray") || lowerName.contains("grey") -> Color.GRAY
+                lowerName.contains("orange") -> Color.parseColor("#FF9800")
+                lowerName.contains("purple") -> Color.parseColor("#9C27B0")
+                lowerName.contains("pink") -> Color.parseColor("#E91E63")
+                lowerName.contains("brown") -> Color.parseColor("#795548")
+                lowerName.contains("beige") -> Color.parseColor("#F5F5DC")
+                lowerName.contains("teal") -> Color.parseColor("#008080")
+                lowerName.contains("maroon") -> Color.parseColor("#800000")
+                lowerName.contains("silver") -> Color.parseColor("#C0C0C0")
+                lowerName.contains("gold") -> Color.parseColor("#FFD700")
+                lowerName.startsWith("#") -> Color.parseColor(name)
+                else -> ColorTemplate.MATERIAL_COLORS[0]
+            }
+        } catch (e: Exception) {
+            Color.GRAY
+        }
     }
 
     private fun setupCategoryChart(worn: Map<String, Int>) {

@@ -89,6 +89,7 @@ class HomeActivity : AppCompatActivity() {
             items,
             onDeleteClick = { deleteItem(it) },
             onLaundryClick = { moveToLaundry(it) },
+            onWornClick = { markAsWorn(it) },
             onItemClick = { openDetail(it) }
         )
         binding.recyclerViewHome.layoutManager = GridLayoutManager(this, 2)
@@ -147,6 +148,8 @@ class HomeActivity : AppCompatActivity() {
             R.id.chipBottom -> "bottom"
             R.id.chipShoes -> "shoes"
             R.id.chipOuterwear -> "outerwear"
+            R.id.chipDress -> "dress"
+            R.id.chipAccessory -> "accessory"
             else -> null
         }
 
@@ -154,6 +157,8 @@ class HomeActivity : AppCompatActivity() {
         val bottomKeywords = listOf("bottom", "pants", "jeans", "skirt", "shorts", "trouser")
         val shoesKeywords = listOf("shoe", "sneaker", "boot", "sandal", "heel", "flat")
         val outerwearKeywords = listOf("outerwear", "jacket", "coat", "blazer", "cardigan")
+        val dressKeywords = listOf("dress", "gown", "jumpsuit", "romper")
+        val accessoryKeywords = listOf("accessory", "bag", "belt", "hat", "scarf", "jewelry", "watch", "glasses")
 
         CoroutineScope(Dispatchers.IO).launch {
             val dbItems = db.clothingDao().getClosetItems()
@@ -165,6 +170,8 @@ class HomeActivity : AppCompatActivity() {
                         "bottom" -> bottomKeywords.any { sub.contains(it) }
                         "shoes" -> shoesKeywords.any { sub.contains(it) }
                         "outerwear" -> outerwearKeywords.any { sub.contains(it) }
+                        "dress" -> dressKeywords.any { sub.contains(it) }
+                        "accessory" -> accessoryKeywords.any { sub.contains(it) }
                         else -> false
                     }
                 }
@@ -265,6 +272,47 @@ class HomeActivity : AppCompatActivity() {
             item.status = "laundry"
             db.clothingDao().updateItem(item)
             loadItems()
+        }
+    }
+
+    private fun markAsWorn(item: ClothingItem) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Ensure we send a body for POST
+                val emptyBody = "{}".toRequestBody("application/json".toMediaTypeOrNull())
+                val response = RetrofitClient.instance.markItemWorn(item.id, emptyBody).execute()
+                
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val body = response.body()?.string() ?: ""
+                        val json = org.json.JSONObject(body)
+                        val itemObj = json.getJSONObject("item")
+                        val wornCount = json.optInt("wornCount", 0)
+                        val isWornToday = json.optBoolean("isWornToday", false)
+                        val lastWorn = itemObj.optString("lastWorn")
+                        
+                        // Update local DB
+                        item.lastWorn = lastWorn
+                        item.wornCount = wornCount
+                        CoroutineScope(Dispatchers.IO).launch {
+                            db.clothingDao().updateItem(item)
+                        }
+
+                        SoundHelper.playSuccessSound(this@HomeActivity)
+                        val msg = if (isWornToday) "Wear recorded! ($wornCount total)" else "Wear removed! ($wornCount total)"
+                        Toast.makeText(this@HomeActivity, msg, Toast.LENGTH_SHORT).show()
+                        loadItems() // Refresh UI
+                    } else {
+                        Log.e("HomeActivity", "Wear error: ${response.code()}")
+                        Toast.makeText(this@HomeActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("HomeActivity", "Network error in markAsWorn", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@HomeActivity, "Network Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

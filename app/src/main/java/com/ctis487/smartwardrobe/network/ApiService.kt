@@ -28,7 +28,13 @@ interface ApiService {
     ): Call<ResponseBody>
 
     @POST("api/items/{id}/worn")
-    fun markItemWorn(@Path("id") id: String): Call<ResponseBody>
+    fun markItemWorn(
+        @Path("id") id: String,
+        @Body body: RequestBody
+    ): Call<ResponseBody>
+
+    @POST("api/items/wash-all")
+    fun washAll(): Call<ResponseBody>
 
     @POST("api/search")
     fun searchOutfit(@Body request: OutfitSearchRequest): Call<OutfitSearchResponse>

@@ -11,5 +11,7 @@ data class ClothingItem(
     val subcategory: String?,
     @SerializedName("primaryColor")
     var color: String?,
-    var status: String?
+    var status: String?,
+    var lastWorn: String? = null,
+    var wornCount: Int = 0
 )

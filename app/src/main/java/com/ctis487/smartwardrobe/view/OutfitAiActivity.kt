@@ -45,6 +45,7 @@ class OutfitAiActivity : AppCompatActivity() {
             emptyList(),
             onDeleteClick = {}, // Disabled for AI view
             onLaundryClick = {}, // Disabled for AI view
+            onWornClick = {},    // Disabled for AI view
             onItemClick = {}
         )
         binding.recyclerViewAiItems.layoutManager = GridLayoutManager(this, 2)

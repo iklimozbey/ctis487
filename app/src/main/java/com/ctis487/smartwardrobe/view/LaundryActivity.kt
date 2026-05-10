@@ -33,6 +33,10 @@ class LaundryActivity : AppCompatActivity() {
         setupFilters()
         loadItems()
 
+        binding.btnWashAll.setOnClickListener {
+            washAllItems()
+        }
+
         // ✅ BI-DIRECTIONAL: Immediate sync on start (5 pts)
         CoroutineScope(Dispatchers.IO).launch {
             com.ctis487.smartwardrobe.network.SyncManager.syncFromBackend(this@LaundryActivity)
@@ -57,6 +61,7 @@ class LaundryActivity : AppCompatActivity() {
             items,
             onDeleteClick = { deleteItem(it) },
             onLaundryClick = { moveToCloset(it) },
+            onWornClick = { }, // Not used in LaundryActivity
             onItemClick = { openDetail(it) }
         )
         binding.recyclerViewLaundry.layoutManager = GridLayoutManager(this, 2)
@@ -94,13 +99,34 @@ class LaundryActivity : AppCompatActivity() {
             R.id.chipTop -> "top"
             R.id.chipBottom -> "bottom"
             R.id.chipShoes -> "shoes"
+            R.id.chipOuterwear -> "outerwear"
+            R.id.chipDress -> "dress"
+            R.id.chipAccessory -> "accessory"
             else -> null
         }
+
+        val topKeywords = listOf("top", "shirt", "t-shirt", "blouse", "sweater", "tank", "hoodie")
+        val bottomKeywords = listOf("bottom", "pants", "jeans", "skirt", "shorts", "trouser")
+        val shoesKeywords = listOf("shoe", "sneaker", "boot", "sandal", "heel", "flat")
+        val outerwearKeywords = listOf("outerwear", "jacket", "coat", "blazer", "cardigan")
+        val dressKeywords = listOf("dress", "gown", "jumpsuit", "romper")
+        val accessoryKeywords = listOf("accessory", "bag", "belt", "hat", "scarf", "jewelry", "watch", "glasses")
 
         CoroutineScope(Dispatchers.IO).launch {
             val dbItems = db.clothingDao().getAllItems().filter { it.status == "laundry" }
             val filteredItems = if (categoryFilter != null) {
-                dbItems.filter { it.subcategory?.contains(categoryFilter, ignoreCase = true) == true }
+                dbItems.filter { item ->
+                    val sub = item.subcategory?.lowercase() ?: ""
+                    when (categoryFilter) {
+                        "top" -> topKeywords.any { sub.contains(it) }
+                        "bottom" -> bottomKeywords.any { sub.contains(it) }
+                        "shoes" -> shoesKeywords.any { sub.contains(it) }
+                        "outerwear" -> outerwearKeywords.any { sub.contains(it) }
+                        "dress" -> dressKeywords.any { sub.contains(it) }
+                        "accessory" -> accessoryKeywords.any { sub.contains(it) }
+                        else -> false
+                    }
+                }
             } else {
                 dbItems
             }
@@ -131,6 +157,38 @@ class LaundryActivity : AppCompatActivity() {
             item.status = "closet"
             db.clothingDao().updateItem(item)
             loadItems()
+        }
+    }
+
+    private fun washAllItems() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // 1. Call backend wash-all
+                val response = com.ctis487.smartwardrobe.network.RetrofitClient.instance.washAll().execute()
+                
+                if (response.isSuccessful) {
+                    // 2. Update local DB
+                    val allItems = db.clothingDao().getAllItems()
+                    allItems.filter { it.status == "laundry" }.forEach { 
+                        it.status = "closet"
+                        db.clothingDao().updateItem(it)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        com.ctis487.smartwardrobe.utils.SoundHelper.playSuccessSound(this@LaundryActivity)
+                        android.widget.Toast.makeText(this@LaundryActivity, "All items washed!", android.widget.Toast.LENGTH_SHORT).show()
+                        loadItems()
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        android.widget.Toast.makeText(this@LaundryActivity, "Backend error", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(this@LaundryActivity, "Network Error", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

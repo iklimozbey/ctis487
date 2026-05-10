@@ -91,6 +91,22 @@
                 android:text="@string/outerwear"
                 style="@style/Widget.Material3.Chip.Filter"
                 app:checkedIconVisible="false"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipDress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dresses"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAccessory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accessories"
+                style="@style/Widget.Material3.Chip.Filter"
+                app:checkedIconVisible="false"/>
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
